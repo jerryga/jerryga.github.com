@@ -3,11 +3,12 @@
 # ----------------------- #
 
 url: http://JerryGa.github.com
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+title: Hello World,Ga Ga
+subtitle: Sunshine
+author: JerryGa
 simple_search: http://google.com/search
 description:
+In the end, it’s not the years in your life that count. It’s the life in your years.
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
