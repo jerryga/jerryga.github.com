@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Sass | Hello World,Ga Ga]]></title>
+  <title><![CDATA[Category: Sass | Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/blog/categories/sass/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-03-20T20:31:13+08:00</updated>
+  <updated>2013-03-20T20:34:14+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
-    <name><![CDATA[jerryga]]></name>
+    <name><![CDATA[JerryGa]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
