@@ -1,15 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://JerryGa.github.com/blog/archives/</loc>
-        <lastmod>2013-03-20T13:27:28+08:00</lastmod>
+        <loc>http://jerryga.github.com/blog/2013/03/20/hello-world/</loc>
+        <lastmod>2013-03-20T20:06:21+08:00</lastmod>
     </url>
     <url>
-        <loc>http://JerryGa.github.com/</loc>
-        <lastmod>2013-03-20T13:27:28+08:00</lastmod>
+        <loc>http://jerryga.github.com/blog/2013/03/20/ss/</loc>
+        <lastmod>2013-03-20T20:06:21+08:00</lastmod>
     </url>
     <url>
-        <loc>http://JerryGa.github.com/robots.txt</loc>
-        <lastmod>2013-03-20T13:27:28+08:00</lastmod>
+        <loc>http://jerryga.github.com/blog/archives/</loc>
+        <lastmod>2013-03-20T20:06:21+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://jerryga.github.com/</loc>
+        <lastmod>2013-03-20T20:06:21+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://jerryga.github.com/robots.txt</loc>
+        <lastmod>2013-03-20T20:06:21+08:00</lastmod>
     </url>
 </urlset>
