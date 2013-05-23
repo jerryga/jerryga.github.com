@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-05-23T17:55:18+08:00</updated>
+  <updated>2013-05-23T18:01:37+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Set up Android Environment On Mac]]></title>
+    <link href="http://jerryga.github.com/blog/2013/05/23/set-up-android-environment-on-mac/"/>
+    <updated>2013-05-23T17:59:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/05/23/set-up-android-environment-on-mac</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OKay~]]></title>
