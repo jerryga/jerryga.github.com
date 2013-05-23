@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Hello World,JerryGa]]></title>
-  <link href="http://jerryga.org/atom.xml" rel="self"/>
-  <link href="http://jerryga.org/"/>
-  <updated>2013-05-23T16:44:06+08:00</updated>
-  <id>http://jerryga.org/</id>
+  <link href="http://jerryga.github.com/atom.xml" rel="self"/>
+  <link href="http://jerryga.github.com/"/>
+  <updated>2013-05-23T16:51:37+08:00</updated>
+  <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
     
@@ -14,46 +14,55 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Test URL002]]></title>
+    <link href="http://jerryga.github.com/blog/2013/05/23/test-url002/"/>
+    <updated>2013-05-23T16:51:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/05/23/test-url002</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Test URL]]></title>
-    <link href="http://jerryga.org/blog/2013/05/23/test-url/"/>
+    <link href="http://jerryga.github.com/blog/2013/05/23/test-url/"/>
     <updated>2013-05-23T16:43:00+08:00</updated>
-    <id>http://jerryga.org/blog/2013/05/23/test-url</id>
+    <id>http://jerryga.github.com/blog/2013/05/23/test-url</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[cocos2d-x]]></title>
-    <link href="http://jerryga.org/blog/2013/05/23/cocos2d-x/"/>
+    <link href="http://jerryga.github.com/blog/2013/05/23/cocos2d-x/"/>
     <updated>2013-05-23T16:41:00+08:00</updated>
-    <id>http://jerryga.org/blog/2013/05/23/cocos2d-x</id>
+    <id>http://jerryga.github.com/blog/2013/05/23/cocos2d-x</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[0523]]></title>
-    <link href="http://jerryga.org/blog/2013/05/23/0523/"/>
+    <link href="http://jerryga.github.com/blog/2013/05/23/0523/"/>
     <updated>2013-05-23T16:25:00+08:00</updated>
-    <id>http://jerryga.org/blog/2013/05/23/0523</id>
+    <id>http://jerryga.github.com/blog/2013/05/23/0523</id>
     <content type="html"><![CDATA[<p>如何在在Mac上搭建起Eclipse的 Android环境.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Coding]]></title>
-    <link href="http://jerryga.org/blog/2013/03/21/coding/"/>
+    <link href="http://jerryga.github.com/blog/2013/03/21/coding/"/>
     <updated>2013-03-21T10:19:00+08:00</updated>
-    <id>http://jerryga.org/blog/2013/03/21/coding</id>
+    <id>http://jerryga.github.com/blog/2013/03/21/coding</id>
     <content type="html"><![CDATA[<p>In the end, it’s not the years in your life that count. It’s the life in your years.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Hello World]]></title>
-    <link href="http://jerryga.org/blog/2013/03/20/hello-world/"/>
+    <link href="http://jerryga.github.com/blog/2013/03/20/hello-world/"/>
     <updated>2013-03-20T17:55:00+08:00</updated>
-    <id>http://jerryga.org/blog/2013/03/20/hello-world</id>
+    <id>http://jerryga.github.com/blog/2013/03/20/hello-world</id>
     <content type="html"><![CDATA[
 ]]></content>
   </entry>
