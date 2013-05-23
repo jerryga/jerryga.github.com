@@ -1,31 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://jerryga.github.com/blog/2013/03/20/hello-world/</loc>
+        <loc>http://jerryga.org/blog/2013/03/20/hello-world/</loc>
         <lastmod>2013-03-21T10:17:37+08:00</lastmod>
     </url>
     <url>
-        <loc>http://jerryga.github.com/blog/2013/03/21/coding/</loc>
+        <loc>http://jerryga.org/blog/2013/03/21/coding/</loc>
         <lastmod>2013-03-21T10:24:39+08:00</lastmod>
     </url>
     <url>
-        <loc>http://jerryga.github.com/blog/2013/05/23/0523/</loc>
+        <loc>http://jerryga.org/blog/2013/05/23/0523/</loc>
         <lastmod>2013-05-23T16:28:35+08:00</lastmod>
     </url>
     <url>
-        <loc>http://jerryga.github.com/blog/2013/05/23/cocos2d-x/</loc>
+        <loc>http://jerryga.org/blog/2013/05/23/cocos2d-x/</loc>
         <lastmod>2013-05-23T16:41:14+08:00</lastmod>
     </url>
     <url>
-        <loc>http://jerryga.github.com/blog/archives/</loc>
-        <lastmod>2013-05-23T16:41:14+08:00</lastmod>
+        <loc>http://jerryga.org/blog/2013/05/23/test-url/</loc>
+        <lastmod>2013-05-23T16:43:57+08:00</lastmod>
     </url>
     <url>
-        <loc>http://jerryga.github.com/</loc>
-        <lastmod>2013-05-23T16:41:14+08:00</lastmod>
+        <loc>http://jerryga.org/blog/archives/</loc>
+        <lastmod>2013-05-23T16:43:57+08:00</lastmod>
     </url>
     <url>
-        <loc>http://jerryga.github.com/robots.txt</loc>
+        <loc>http://jerryga.org/</loc>
+        <lastmod>2013-05-23T16:43:57+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://jerryga.org/robots.txt</loc>
         <lastmod>2013-03-20T20:06:21+08:00</lastmod>
     </url>
 </urlset>

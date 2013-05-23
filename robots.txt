@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://jerryga.github.com/sitemap.xml 
+Sitemap: http://jerryga.org/sitemap.xml 
