@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-05-23T17:46:47+08:00</updated>
+  <updated>2013-05-23T17:48:07+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -18,8 +18,9 @@
     <link href="http://jerryga.github.com/blog/2013/05/23/okay/"/>
     <updated>2013-05-23T17:45:00+08:00</updated>
     <id>http://jerryga.github.com/blog/2013/05/23/okay</id>
-    <content type="html"><![CDATA[<p>This is me , a Coding Runder,gaga~
-<img src="http://jerryga.github.com/static/Ga.JPG" alt="" /></p>
+    <content type="html"><![CDATA[<p>This is me , a Coding Runder,gaga~</p>
+
+<p><img src="http://jerryga.github.com/static/Ga.JPG" alt="" /></p>
 ]]></content>
   </entry>
   
