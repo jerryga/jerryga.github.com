@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-05-23T17:32:42+08:00</updated>
+  <updated>2013-05-23T17:33:57+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,27 +12,5 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress SetUp]]></title>
-    <link href="http://jerryga.github.com/blog/2013/05/23/octopress-setup/"/>
-    <updated>2013-05-23T17:30:00+08:00</updated>
-    <id>http://jerryga.github.com/blog/2013/05/23/octopress-setup</id>
-    <content type="html"><![CDATA[<p>TestPhotos</p>
-
-<p><img src="http://jerryga.github.com/static/Fruit04.png" alt="" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Coding]]></title>
-    <link href="http://jerryga.github.com/blog/2013/03/21/coding/"/>
-    <updated>2013-03-21T10:19:00+08:00</updated>
-    <id>http://jerryga.github.com/blog/2013/03/21/coding</id>
-    <content type="html"><![CDATA[<p>A Boy ,JerryGaGaGa said that ,In the end, it’s not the years in your life that count. It’s the life in your years.
-<img src="http://jerryga.github.com/static/Fruit04.png" alt=" Ultrablog.vim post title bug " />
-<img src="http://jerryga.github.com/static/Fruit04.png" alt="" /></p>
-]]></content>
-  </entry>
   
 </feed>
