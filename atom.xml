@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-05-23T17:31:31+08:00</updated>
+  <updated>2013-05-23T17:32:42+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -18,7 +18,9 @@
     <link href="http://jerryga.github.com/blog/2013/05/23/octopress-setup/"/>
     <updated>2013-05-23T17:30:00+08:00</updated>
     <id>http://jerryga.github.com/blog/2013/05/23/octopress-setup</id>
-    <content type="html"><![CDATA[<p><img src="http://jerryga.github.com/static/Fruit04.png" alt="" /></p>
+    <content type="html"><![CDATA[<p>TestPhotos</p>
+
+<p><img src="http://jerryga.github.com/static/Fruit04.png" alt="" /></p>
 ]]></content>
   </entry>
   
