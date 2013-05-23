@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-05-23T17:22:30+08:00</updated>
+  <updated>2013-05-23T17:24:46+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,16 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress SetUp]]></title>
-    <link href="http://jerryga.github.com/blog/2013/05/23/octopress-setup/"/>
-    <updated>2013-05-23T17:15:00+08:00</updated>
-    <id>http://jerryga.github.com/blog/2013/05/23/octopress-setup</id>
-    <content type="html"><![CDATA[<p>(/static/Fruit04.png)
-/static/Fruit04.png</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Coding]]></title>
