@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-05-24T11:48:55+08:00</updated>
+  <updated>2013-05-24T11:51:50+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -31,7 +31,7 @@
 <ul>
 <li>HTTP test Client</li>
 <li>used for：at least mac os10.7</li>
-<li>DownLoad:<img src="https://github.com/jerryga/Http.git" alt="" /></li>
+<li>DownLoad:<a href="">https://github.com/jerryga/Http.git</a></li>
 <li>URL：eg：http://www.google.com</li>
 <li>Go: start test.</li>
 <li>Method: Get/Post
