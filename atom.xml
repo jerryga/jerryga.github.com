@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-05-24T11:54:29+08:00</updated>
+  <updated>2013-05-24T12:01:09+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -83,9 +83,14 @@
 </ul>
 
 
-<p><strong>NOTE</strong>
-* Only for ios http test,  NO Considered web develop and so on&#8230;
-* Refered for Fetcher。</p>
+<h3>Note</h3>
+
+<ul>
+<li>Only for ios http test,  NO Considered web develop and so on&#8230;</li>
+<li>Refered for Fetcher.</li>
+<li>Copyright © 2013 Jerry GaGa</li>
+</ul>
+
 ]]></content>
   </entry>
   
