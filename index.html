@@ -9,7 +9,8 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="This is me~ A Coding Runner ">
+  <meta name="description" content="Http A http app for mac to test http connect &#8216;Http&#8217; App Info Version 1.X ????/??/?? Description: HTTP test Client
+used for：at least mac &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,111 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/24/http-test-app-for-mac/">Http Test App for Mac</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-24T11:47:00+08:00" pubdate data-updated="true">May 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Http</h1>
+
+<p>A http app for mac to test http connect</p>
+
+<h1>&#8216;Http&#8217; App Info</h1>
+
+<h2>Version 1.X ????/??/??</h2>
+
+<h3>Description:</h3>
+
+<ul>
+<li>HTTP test Client</li>
+<li>used for：at least mac os10.7</li>
+<li>DownLoad:<img src="https://github.com/jerryga/Http.git" alt="" /></li>
+<li>URL：eg：http://www.google.com</li>
+<li>Go: start test.</li>
+<li>Method: Get/Post
+<strong>note</strong>only get and post method，others ,I will update soon.</li>
+<li><p>Parameter Type：</p>
+
+<pre><code>            XML：body string format： 
+            &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;id&gt;10002&lt;/id&gt;&lt;name&gt;ga&lt;/name&gt; 
+             body type：NSData
+            **note**xml version 1.0 encoding UTF-8
+             Request Method：Post
+
+            JSON:body string format：{"id":"10002","name":"ga"} 
+            body type：NSData
+            Request Method：Post
+
+            URLPar:Parameter：url?id=10002&amp;name=ga 
+            Request Method：Get **note**the normal method，append parameter after url.
+</code></pre></li>
+<li><p>T1 table：Add HeadField，for example,content-type、Accept,and so on&#8230;</p></li>
+<li><p>T2 table：Add Parameter：</p>
+
+<pre><code>          *1.if you choose ParameterType XML：
+          parameter column，Required
+          value column：Optional.
+          eg1.0：
+          parameter   value
+          info
+          name        ga
+          then generate XML format：
+           &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;Info&gt;&lt;name&gt;ga&lt;/name&gt;&lt;/Info&gt; 
+          eg1.1：
+          parameter column   value column
+          info        hello
+          name        ga
+          then generate XML format：
+           &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;Info&gt;hello&lt;/Info&gt;&lt;name&gt;ga&lt;/name&gt; 
+          *2.if you choose ParameterType JSON：
+              parameter column，Required
+              value column：Optional。
+              eg：2.1
+          parameter column   value column
+          info        hello
+          name        ga
+          then generate Json format：
+           {"name":"ga","Info":"hello"} 
+           *3.ParameterType URLPar：No practical significance，but if you choose Get Method, it is Required.
+</code></pre></li>
+<li><p>Function Button：’+‘、’-‘：add or delete row。</p></li>
+<li>R：Result TextView。It will print head fields、result、error、errorCode。</li>
+</ul>
+
+
+<p><strong>NOTE</strong>
+* Only for ios http test,  NO Considered web develop and so on&#8230;
+* Refered for Fetcher。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -151,6 +257,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/24/http-test-app-for-mac/">Http Test App For Mac</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/05/23/okay/">OKay</a>
