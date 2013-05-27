@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Hello World,JerryGa</title>
+  <title>ios的三维透视投影（转|卢克） - Hello World,JerryGa</title>
   <meta name="author" content="JerryGa">
 
   
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jerryga.github.com">
+  <link rel="canonical" href="http://jerryga.github.com/blog/2013/05/27/iosde-san-wei-tou-shi-tou-ying-%28zhuan-%7Clu-ke-%29">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Hello World,JerryGa" type="application/atom+xml">
@@ -64,15 +64,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/27/iosde-san-wei-tou-shi-tou-ying-%28zhuan-%7Clu-ke-%29/">Ios的三维透视投影（转|卢克）</a></h1>
+      <h1 class="entry-title">Ios的三维透视投影（转|卢克）</h1>
     
     
       <p class="meta">
@@ -95,7 +92,7 @@
   </header>
 
 
-  <div class="entry-content"><p>一.概述
+<div class="entry-content"><p>一.概述
 在iOS中使用CATransform3D这个结构体来表示三维的齐次坐标变换矩阵. 齐次坐标是一种坐标的表示方法，n维空间的坐标需要用n+1个元素的坐标元组来表示,在Quartz 2D Transform中就有关于齐次坐标的应用,那边是关于二维空间的变换，其某点的齐次坐标的最后一个元素始终设置为1。使用齐次坐标而不是简单的数学坐标是为了方便图形进行仿射变换，仿射变换可以通过仿射变换矩阵来实现，3D的仿射变换可以实现诸如 平移(translation)，旋转(rotation),缩放(scaling),切变(shear)等变换。如果不用齐次坐标那么进行坐标变换可能就涉及到两种运算了，加法（平移）和乘法（旋转，缩放），而使用齐次坐标以及齐次坐标变换矩阵后只需要矩阵乘法就可以完成一切了。上面的这些如果需要深入了解就需要去学习一下图形变换的相关知识，自己对矩阵的乘法进行演算。
 iOS中的CALayer的3D本质上并不能算真正的3D(其视点即观察点或者所谓的照相机的位置是无法变换的),而只是3D在二维平面上的投影，投影平面就是手机屏幕也就是xy轴组成的平面(注意iOS中为左手坐标系)，那么视点的位置是如何确定的呢？可以通过CATransform3D中的m34来间接指定， m34 = -1/z,其中z为观察点在z轴上的值,而Layer的z轴的位置则是通过anchorPoint来指定的，所谓的anchorPoint(锚点)就是在变换中保持不变的点，也就是某个Layer在变换中的原点,xyz三轴相交于此点。在iOS中，Layer的anchorPoint使用unit coordinate space来描述，unit coordinate space无需指定具体真实的坐标点而是使用layer bounds中的相对位置，下图展示了一个Layer中的几个特殊的锚点,</p>
 
@@ -143,129 +140,16 @@ transform = CATransform3DTranslate(transform, 0, 0, -10);
 <p>虚线为投影线，其和x轴的交点即为A点的投影点。 由相似三角形的定理我们很容易算出投影的点，
 1000/(1000 + 10) = x/6,则x = 6*1000/1010 = 6/1.01</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/catransform3d/">CATransform3D</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">JerryGa</span></span>
 
-<time datetime="2013-05-27T16:25:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>1 CATransform3D结构成员的意义：</h3>
-
-<p>strct CATransform3D {</p>
-
-<pre><code>CGFloat m11（x缩放）, m12（y切变）, m13（旋转）, m14（）;
-CGFloat m21（x切变）, m22（y缩放）, m23（）, m24（）;
-CGFloat m31（旋转）, m32（）, m33（）, m34（透视效果，要操作   的这个对象要有旋转的角度，否则没有效果。正直/负值都有意义）;
-CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
-</code></pre>
-
-<p>};</p>
-
-<p>整体比例变换时（m11 == m22），若m33>1,图形整体缩小，若0&lt;m33&lt;1,图形整体放大，若s&lt;0,则发烧关于原点的对称等比变换。</p>
-
-<h3>2 CATransform3DMakeTranslation</h3>
-
-<p>CATransform3DMakeTranslation(0, 0, 0) 创建了一个4*4的单位矩阵。</p>
-
-<h3>3 CATransform3DMakeRotation And CATransform3DRotate</h3>
-
-<h3>4 翻转动画</h3>
-
-<ul>
-<li><p>(void)animationCubeRotate:(RotateDirection)directionwithDuration:(float)duration
-{
-  [CATransaction flush];
-  CGFloat height = self.bounds.size.height;
-  CABasicAnimation <em>rotation;
-  // CABasicAnimation </em>translationX;  // 如果沿X轴翻转,则用不到这个变量.
-  CABasicAnimation <em>translationY; // 如果沿Y轴翻转,则用不到这个变量.
-  CABasicAnimation </em>translationZ;
-  CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
-  animationGroup.delegate = self;
-  animationGroup.duration = duration;</p>
-
-<p>  if ( direction == RotateFromBottom )
-  {</p>
-
-<pre><code>  // 创建(某方向)关键帧动画.
-  translationY = [CABasicAnimation animationWithKeyPath:
-                  @"sublayerTransform.translation.y"];
-  translationY.toValue = [NSNumber numberWithFloat:-(height / 2)];【2】
-  rotation = [CABasicAnimation animationWithKeyPath:
-              @"sublayerTransform.rotation.x"];
-  rotation.toValue = [NSNumber numberWithFloat:D2R(-90.0f)];
-</code></pre>
-
-<p>  }
-  else if ( direction == RotateFromTop )
-  {
-  }</p>
-
-<p>  // 处理Z轴
-  translationZ = [CABasicAnimation animationWithKeyPath:</p>
-
-<pre><code>              @"sublayerTransform.translation.z"];
-</code></pre>
-
-  translationZ.toValue = [NSNumber numberWithFloat:height / 2];【3】
-  animationGroup.animations =
-
-<pre><code>  [NSArray arrayWithObjects: rotation, translationY, translationZ, nil];
-</code></pre>
-
-<p>  animationGroup.fillMode = kCAFillModeForwards;
-  animationGroup.removedOnCompletion = NO;
-  [_transformedLayer addAnimation:animationGroup forKey:kAnimationKey];
-}</p></li>
-</ul>
-
-
-<p>*针对X轴旋转，就是1，0，0，针对Y轴旋转，就是0，1，0&#8230;下面那行也要进行正确的转换。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/24/http-test-app-for-mac/">Http Test App for Mac</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -277,173 +161,32 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
   
 
 
-<time datetime="2013-05-24T11:47:00+08:00" pubdate data-updated="true">May 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>A http app for mac to test http connect</strong></p>
-
-<h1>&#8216;Http&#8217; App Info</h1>
-
-<h2>Version 1.X ????/??/??</h2>
-
-<h3>Description:</h3>
-
-<ul>
-<li>HTTP test Client</li>
-<li>used for：at least mac os10.7</li>
-<li>DownLoad:<a href="https://github.com/jerryga/Http.git">https://github.com/jerryga/Http.git</a></li>
-<li>URL：eg：http://www.google.com</li>
-<li>Go: start test.</li>
-<li>Method: Get/Post
-<strong>note</strong>only get and post method，others ,I will update soon.</li>
-<li><p>Parameter Type：</p>
-
-<pre><code>            XML：body string format： 
-            &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;id&gt;10002&lt;/id&gt;&lt;name&gt;ga&lt;/name&gt; 
-             body type：NSData
-            **note**xml version 1.0 encoding UTF-8
-             Request Method：Post
-
-            JSON:body string format：{"id":"10002","name":"ga"} 
-            body type：NSData
-            Request Method：Post
-
-            URLPar:Parameter：url?id=10002&amp;name=ga 
-            Request Method：Get **note**the normal method，append parameter after url.
-</code></pre></li>
-<li><p>T1 table：Add HeadField，for example,content-type、Accept,and so on&#8230;</p></li>
-<li><p>T2 table：Add Parameter：</p>
-
-<pre><code>          *1.if you choose ParameterType XML：
-          parameter column，Required
-          value column：Optional.
-          eg1.0：
-          parameter   value
-          info
-          name        ga
-          then generate XML format：
-           &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;Info&gt;&lt;name&gt;ga&lt;/name&gt;&lt;/Info&gt; 
-          eg1.1：
-          parameter column   value column
-          info        hello
-          name        ga
-          then generate XML format：
-           &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;Info&gt;hello&lt;/Info&gt;&lt;name&gt;ga&lt;/name&gt; 
-          *2.if you choose ParameterType JSON：
-              parameter column，Required
-              value column：Optional。
-              eg：2.1
-          parameter column   value column
-          info        hello
-          name        ga
-          then generate Json format：
-           {"name":"ga","Info":"hello"} 
-           *3.ParameterType URLPar：No practical significance，but if you choose Get Method, it is Required.
-</code></pre></li>
-<li><p>Function Button：’+‘、’-‘：add or delete row。</p></li>
-<li>R：Result TextView。It will print head fields、result、error、errorCode。</li>
-</ul>
-
-
-<h3>Note</h3>
-
-<ul>
-<li>Only for ios http test,  NO Considered web develop and so on&#8230;</li>
-<li>Refered for Fetcher.</li>
-<li>Copyright © 2013 Jerry GaGa</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2013-05-27T17:13:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
       
-  <header>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/23/okay/">OKay</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
-
-
-<time datetime="2013-05-23T19:52:00+08:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This is me~ A Coding Runner</p>
-
-<p><img src="/static/Ga.png" alt="" /></p>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/05/27/iosde-san-wei-tou-shi-tou-ying-%28zhuan-%7Clu-ke-%29/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/05/27/iosde-san-wei-tou-shi-tou-ying-%28zhuan-%7Clu-ke-%29/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/23/set-up-android-environment-on-mac/">Set Up Android Environment on Mac</a></h1>
-    
-    
-      <p class="meta">
-        
+        <a class="basic-alignment left" href="/blog/2013/05/27/catransform3d/" title="Previous Post: CATransform3D">&laquo; CATransform3D</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-23T17:59:00+08:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Step</p>
 </div>
-  
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -479,6 +222,7 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
 
   
 </aside>
+
 
     </div>
   </div>
