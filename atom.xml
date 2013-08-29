@@ -4,7 +4,7 @@
   <title><![CDATA[Hello World,JerryGa]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-08-29T23:03:05+08:00</updated>
+  <updated>2013-08-29T23:06:51+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Alipay]]></title>
+    <link href="http://jerryga.github.com/blog/2013/08/29/alipay/"/>
+    <updated>2013-08-29T23:03:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/08/29/alipay</id>
+    <content type="html"><![CDATA[<h3>在ios支付宝相关测试中：报错：<strong><em>rsa_private read error : private key is NULL</em></strong>###原因：私钥没有转成PKCS8####解决方法：>1）在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;&#8212;&#8211;BEGIN PRIVATE KEY&#8212;&#8211;\n&#8221;]; 将其改成 [result appendString:@&#8221;&#8212;&#8211;BEGIN RSA PRIVATE KEY&#8212;&#8211;\n&#8221;];2）在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;\n&#8212;&#8211;END PRIVATE KEY&#8212;&#8211;&#8221;]; 将其改成 [result appendString:@&#8221;\n&#8212;&#8211;END RSA PRIVATE KEY&#8212;&#8211;&#8221;];></h3>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ruby]]></title>
