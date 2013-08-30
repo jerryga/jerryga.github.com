@@ -9,7 +9,8 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="markdown语法快速成文，git与github实时保存，jekyll或octopress实时成书或者showoff实时成ppt。入门略有门槛，但是习惯了，写作效率会好很多。以下以octopress为例，进行说明。 配置个人github账号: 登陆github，创建一个个人账号。假设叫做： &hellip;">
+  <meta name="description" content="Link: markDown
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,42 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/30/markdownyu-fa-shuo-ming/">MarkDown语法说明</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-30T11:12:00+08:00" pubdate data-updated="true">Aug 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Link: <a href="http://wowubuntu.com/markdown/#overview">markDown</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -210,7 +247,10 @@
   </header>
 
 
-  <div class="entry-content"><h3>在ios支付宝相关测试中：报错：<strong><em>rsa_private read error : private key is NULL</em></strong>###原因：私钥没有转成PKCS8####解决方法：>1）在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;&#8212;&#8211;BEGIN PRIVATE KEY&#8212;&#8211;\n&#8221;]; 将其改成 [result appendString:@&#8221;&#8212;&#8211;BEGIN RSA PRIVATE KEY&#8212;&#8211;\n&#8221;];2）在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;\n&#8212;&#8211;END PRIVATE KEY&#8212;&#8211;&#8221;]; 将其改成 [result appendString:@&#8221;\n&#8212;&#8211;END RSA PRIVATE KEY&#8212;&#8211;&#8221;];></h3>
+  <div class="entry-content"><h3>在ios支付宝相关测试中：报错：<strong><em>rsa_private read error : private key is NULL</em></strong>###原因：私钥没有转成PKCS8####解决方法：</h3>
+
+<p>1.在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;&#8212;&#8211;BEGIN PRIVATE KEY&#8212;&#8211;\n&#8221;]; 将其改成 [result appendString:@&#8221;&#8212;&#8211;BEGIN RSA PRIVATE KEY&#8212;&#8211;\n&#8221;];
+2.在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;\n&#8212;&#8211;END PRIVATE KEY&#8212;&#8211;&#8221;]; 将其改成 [result appendString:@&#8221;\n&#8212;&#8211;END RSA PRIVATE KEY&#8212;&#8211;&#8221;];</p>
 </div>
   
   
@@ -602,6 +642,10 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/30/markdownyu-fa-shuo-ming/">MarkDown语法说明</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/29/ruby-log/">Ruby Log</a>
       </li>
     
@@ -615,10 +659,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
       <li class="post">
         <a href="/blog/2013/05/27/catransform3d/">CATransform3D</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/24/http-test-app-for-mac/">Http Test App For Mac</a>
       </li>
     
   </ul>
