@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>GCD - Hello World,JerryGa</title>
+  <meta name="author" content="JerryGa">
+
+  
+  <meta name="description" content="What is GCD? Grand Central Dispatch 简称为GCD，这是一套底层api，提供了一种新的方法来进行并发程序编写。类似于NSOperationQueue，允许程序将多个任务切分为多个单一任务然后提交到工作队列来并发地或者串行地执行。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jerryga.github.com/blog/2013/08/30/gcd">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Hello World,JerryGa" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Hello World,JerryGa</a></h1>
+  
+    <h2>Sunshine</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jerryga.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">GCD</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-30T11:25:00+08:00" pubdate data-updated="true">Aug 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>What is GCD?</h3>
+
+<p>Grand Central Dispatch 简称为GCD，这是一套底层api，提供了一种新的方法来进行并发程序编写。类似于NSOperationQueue，允许程序将多个任务切分为多个单一任务然后提交到工作队列来并发地或者串行地执行。GCD相对于NSOperationQueue更底层，更高效，并且它不是Cocoa框架的一部分。</p>
+
+<h3>GCD的功能如下：</h3>
+
+<ol>
+<li>正如开头所说，GCD允许将多个任务切分为多个单一任务并发或者串行地执行。这个应该是使用GCD最多的地方。</li>
+<li>可以设置句柄来响应文件描述符。（如可以通过GCD来读取文件，并获得读取进度，这个在JerryGa的github有相关Demo）</li>
+<li>可以通过mach ports来进行进程间的通讯。</li>
+<li>计时器、信号量、用户生成事件。</li>
+</ol>
+
+
+<h3>GCD的优势：</h3>
+
+<ol>
+<li><strong><em>简单易用</em></strong>。由于GCD基于work unit而非像thread那样基于运算，所以GCD可以控制诸如等待任务结束、监视文件描述符、周期执行代码以及工作挂起等任务。基于block的血统导致它能极为简单得在不同代码作用域之间传递上下文。</li>
+<li><strong><em>效率</em></strong>: GCD被实现得如此轻量和优雅，使得它在很多地方比之专门创建消耗资源的线程更实用且快速。这关系到易用性：导致GCD易用的原因有一部分在于你可以不用担心太多的效率问题而仅仅使用它就行了。</li>
+<li><strong><em>性能</em></strong>: GCD自动根据系统负载来增减线程数量，这就减少了上下文切换以及增加了计算效率。</li>
+</ol>
+
+
+<h3>Dispatch Objects</h3>
+
+<p>Dispatch Object也是使用引用计数的，使用dispatch_release和dispatch_retain函数来操作dispatch object进行内存管理。但是dispatch不参与垃圾回收机制（ARC）。</p>
+
+<h3>Dispatch Queues</h3>
+
+<p>并行概念：同一时间执行多个不同任务。
+串行概念：同一时间只能执行单一任务。</p>
+
+<p>GCD有三种队列：</p>
+
+<ol>
+<li>main queue:串行队列。提交到此queue的任务会在主线程中执行。使用dispatch_get_main_queue()来获取.</li>
+<li><p>global queue：全局队列。是并发队列。有三个优先级：</p>
+
+<pre><code>DISPATCH_QUEUE_PRIORITY_HIGH 2 //最高
+DISPATCH_QUEUE_PRIORITY_DEFAULT 0 //默认
+DISPATCH_QUEUE_PRIORITY_LOW (-2) //低级
+DISPATCH_QUEUE_PRIORITY_BACKGROUND           INT16_MIN( Available in iOS 5.0 and later.)//某些磁盘读写操作可以设置此优先级。
+</code></pre>
+
+<p> 获取全局队列代码如下：                                       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</p></li>
+<li><p>自己创建的队列。有两方式：串行、并行。串行可以用来实现同步机制，类似线程锁。EG：</p>
+
+<p> <strong><em>串行</em></strong></p>
+
+<pre><code>DISPATCH_QUEUE_SERIAL FIFO
+dispatch_queue_t serialQueue =   dispatch_queue_create("com.Test.gcd", DISPATCH_QUEUE_SERIAL);
+
+dispatch_async(serialQueue, ^{
+ NSLog(@"Task1*** ");
+ });
+
+ dispatch_async(serialQueue, ^{
+ NSLog(@"Task2***");
+ });
+dispatch_async(serialQueue, ^{
+ NSLog(@"Task3*** ");
+ });
+</code></pre>
+
+<p>测试输出结果如下：</p>
+
+<pre><code>  2013-08-30 12:20:19.684 GCDTestPro[3882:1303] Task1*** 
+  2013-08-30 12:20:19.685 GCDTestPro[3882:1303] Task2***
+  2013-08-30 12:20:19.686 GCDTestPro[3882:1303] Task3***
+</code></pre>
+
+<p>  <strong><em>并行</em></strong></p>
+
+<pre><code>DISPATCH_QUEUE_CONCURRENT
+
+  dispatch_queue_t asyQueue = dispatch_queue_create("com.Test.gcd", DISPATCH_QUEUE_CONCURRENT);
+
+  dispatch_async(asyQueue, ^{
+  NSLog(@"Task1*** ");
+  });
+  dispatch_async(asyQueue, ^{
+  NSLog(@"Task2***");
+  });
+  dispatch_async(asyQueue, ^{
+  NSLog(@"Task3*** ");
+  });
+</code></pre>
+
+<p>测试输出结果如下：</p>
+
+<pre><code>2013-08-30 12:27:34.523 GCDTestPro[4043:1b03] Task2***
+2013-08-30 12:27:34.523 GCDTestPro[4043:1303] Task1*** 
+2013-08-30 12:27:34.523 GCDTestPro[4043:3d13] Task3*** 
+</code></pre></li>
+</ol>
+
+
+<p>从测试结果可以看出：串行队列是同步机制。按照先入先出的原则依顺序执行。而异步队列的执行顺序是无序的。所以，对于自定义队列有两种：FIFO、ASY，由创建队列时的dispatch_queue_attr_t决定。注意：DISPATCH_QUEUE_CONCURRENT是在4.3以后才可以使用。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JerryGa</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-30T11:25:00+08:00" pubdate data-updated="true">Aug 30<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/08/30/gcd/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/08/30/gcd/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/08/30/markdownyu-fa-shuo-ming/" title="Previous Post: MarkDown语法说明">&laquo; MarkDown语法说明</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/30/gcd/">GCD</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/30/markdownyu-fa-shuo-ming/">MarkDown语法说明</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/29/ruby-log/">Ruby Log</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/29/alipay/">Alipay</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/27/iosde-san-wei-tou-shi-tou-ying-%28zhuan-%7Clu-ke-%29/">ios的三维透视投影（转|卢克）</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - JerryGa -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
