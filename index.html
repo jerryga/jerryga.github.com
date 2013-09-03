@@ -192,6 +192,109 @@ dispatch_async(serialQueue, ^{
 
 
 <p>从测试结果可以看出：串行队列是同步机制。按照先入先出的原则依顺序执行。而异步队列的执行顺序是无序的。所以，对于自定义队列有两种：FIFO、ASY，由创建队列时的dispatch_queue_attr_t决定。注意：DISPATCH_QUEUE_CONCURRENT是在4.3以后才可以使用。</p>
+
+<h3>锁</h3>
+
+<p>由上面测试可以看到，使用同步机制可以用来代替传统多线程编程中的Lock。</p>
+
+<p>eg：</p>
+
+<pre><code>dispatch_queue_t queue =    dispatch_queue_create("com.Test.gcd", DISPATCH_QUEUE_SERIAL);
+
+ - (void)setObj:(id)newObj {
+        dispatch_async(queue, ^{
+            //set obj
+        });
+ }
+
+ - (id)obj {
+ __block id localObj;
+ dispatch_sync(queue, ^{
+    localObj = [obj retain];
+ });
+
+ return [localObj autorelease];
+</code></pre>
+
+<p>对于上面的代码做如下解释：</p>
+
+<p>async是异步处理
+sync 是同步处理，可以从 传统的 “互斥” 来理解。因为在设置obj的时候，可能有一大堆数据需要运算赋值，所以异步执行。dispatch_sync相当于：</p>
+
+<pre><code> pthread_mutex_lock(&amp;lock);
+//access shared resource
+ pthread_mutex_unlock(&amp;lock);
+</code></pre>
+
+<h3>终止Queue</h3>
+
+<p>在GCD API中，并没有提供真正的cancel当前queue的功能（如果想得到更多的queue的控制权，建议用NSOperationQueue） ，在api中有dispatch_suspend（）函数（必须和dispatch_resume调用次数一致），这个函数是挂起queue，提交到queue的block可能已经执行了，在调用dispatch_suspend（）之前，所以dispatch_suspend（）并不能起到cancel当前正在运行task的作用。</p>
+
+<p>现提供一种方法来cancel正在运行的task的方式：</p>
+
+<pre><code>#import "GCDManager.h"
+
+@interface GCDManager ()
+{
+    BOOL isCanceled;
+    dispatch_queue_t myQueue;
+}
+@end
+
+@implementation GCDManager
+
+- (void) cancelCurrentGCD {
+isCanceled = YES;
+}
+
+- (id)init {
+    if (self = [super init]) {
+        isCanceled = NO;
+        myQueue = 
+    dispatch_queue_create("com.GCDTestPro.myQueue",             DISPATCH_QUEUE_SERIAL);
+    }
+    return self;
+}
+
+- (void)doSomeWorkOnGCD {
+    dispatch_async(myQueue, ^{
+        for (int i = 0; i &lt; 1000; ++i) {
+            if (!isCanceled) {
+                NSLog(@"i %d",i);
+            }
+        }
+    });
+}
+
+- (void)dealloc {
+    dispatch_release(myQueue);
+    [super dealloc];
+}
+</code></pre>
+
+<p>测试用例：</p>
+
+<pre><code>GCDManager *manager = [[GCDManager alloc] init];
+[manager doSomeWorkOnGCD];
+[manager performSelector:@selector(cancelCurrentGCD) withObject:nil afterDelay:0.5];
+[manager release];
+</code></pre>
+
+<p>测试结果：</p>
+
+<pre><code>2013-09-03 16:24:25.139 GCDTestPro[6066:1303] i 0
+                    ……
+2013-09-03 16:24:25.638 GCDTestPro[6066:1303] i 607
+2013-09-03 16:24:25.638 GCDTestPro[6066:1303] i 608
+2013-09-03 16:24:25.639 GCDTestPro[6066:1303] i 609
+2013-09-03 16:24:25.639 GCDTestPro[6066:1303] i 610
+2013-09-03 16:24:25.639 GCDTestPro[6066:1303] i 611
+</code></pre>
+
+<p>结果说明：</p>
+
+<p>可以看出，在延迟0.5s之后，task就终止到了i=611的时候。如果不调用
+cancelCurrentGCD，那会一直到i=999，task才回终止。</p>
 </div>
   
   
