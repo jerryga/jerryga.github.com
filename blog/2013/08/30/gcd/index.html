@@ -192,36 +192,44 @@ dispatch_async(serialQueue, ^{
 
 <h3>锁</h3>
 
-<p>由上面测试可以看到，使用同步机制可以用来代替传统多线程编程中的Lock。</p>
+<p>使用GCD的同步机制可以用来代替传统多线程编程中的Lock。</p>
 
-<p>eg：</p>
+<p>eg：
+传统编程中我们可能这样做：</p>
 
-<pre><code>dispatch_queue_t queue =    dispatch_queue_create("com.Test.gcd", DISPATCH_QUEUE_SERIAL);
-
- - (void)setObj:(id)newObj {
-        dispatch_async(queue, ^{
-            //set obj
-        });
- }
-
- - (id)obj {
- __block id localObj;
- dispatch_sync(queue, ^{
-    localObj = [obj retain];
- });
-
- return [localObj autorelease];
+<pre><code>- (void)setStatus:(Status)status {
+@synchronized(self) {
+    _status = status;
+}
+}
 </code></pre>
 
-<p>对于上面的代码做如下解释：</p>
+<p>或者：</p>
+
+<pre><code>- (void)setStatus:(Status)status {
+[_lock lock];
+_status = status;
+[_lock unlock];
+}
+</code></pre>
+
+<p>用GCD来代替：</p>
+
+<pre><code>- (void)setStatus:(Status)status {
+dispatch_sync(_lockQueue, ^{
+    _status = status;
+}
+}
+
+- (void)setStatus:(Status)status {
+dispatch_async(_lockQueue, ^{
+    _status = status;
+}
+}
+</code></pre>
 
 <p>async是异步处理
-sync 是同步处理，可以从 传统的 “互斥” 来理解。因为在设置obj的时候，可能有一大堆数据需要运算赋值，所以异步执行。dispatch_sync相当于：</p>
-
-<pre><code> pthread_mutex_lock(&amp;lock);
-//access shared resource
- pthread_mutex_unlock(&amp;lock);
-</code></pre>
+sync 是同步处理，可以从 传统的 “互斥” 来理解。因为在设置obj的时候，可能有一大堆数据需要运算赋值，所以异步执行。</p>
 
 <h3>终止Queue</h3>
 
@@ -292,6 +300,137 @@ isCanceled = YES;
 
 <p>可以看出，在延迟0.5s之后，task就终止到了i=611的时候。如果不调用
 cancelCurrentGCD，那会一直到i=999，task才回终止。</p>
+
+<h3>Dispatch group</h3>
+
+<p>dispatch group可以将多个要执行的block封装成一组，当这些block完成时，监测到发出的消息。</p>
+
+<p>测试用例：</p>
+
+<pre><code>dispatch_group_t group = dispatch_group_create();
+
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 1");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 2");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 3");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 4");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 5");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 6");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 7");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 8");
+});
+dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+
+NSLog(@"All task in queue finished");
+</code></pre>
+
+<p>输出结果：</p>
+
+<pre><code>2013-09-04 10:45:49.213 GCDTestPro[958:1c03] This is Task 2
+2013-09-04 10:45:49.213 GCDTestPro[958:1e03] This is Task 3
+2013-09-04 10:45:49.213 GCDTestPro[958:4103] This is Task 4
+2013-09-04 10:45:49.213 GCDTestPro[958:1303] This is Task 1
+2013-09-04 10:45:49.216 GCDTestPro[958:1c03] This is Task 5
+2013-09-04 10:45:49.216 GCDTestPro[958:1e03] This is Task 6
+2013-09-04 10:45:49.216 GCDTestPro[958:4103] This is Task 7
+2013-09-04 10:45:49.216 GCDTestPro[958:1303] This is Task 8
+2013-09-04 10:45:49.218 GCDTestPro[958:c07] All task in queue finished
+</code></pre>
+
+<p>这样的话，一直会等到在group中的所有task执行完，会阻塞当前thread。api提供了相关方法来代替此种方式：dispatch_group_notify</p>
+
+<p>测试用例：</p>
+
+<pre><code>dispatch_group_t group = dispatch_group_create();
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 1");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 2");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 3");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 4");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 5");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 6");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 7");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"This is Task 8");
+});
+dispatch_group_notify(group, queue, ^{
+    NSLog(@"All task in queue finished");
+});
+NSLog(@"I am out of group");
+</code></pre>
+
+<p>输出结果：</p>
+
+<pre><code>2013-09-04 10:51:34.256 GCDTestPro[1044:c07] I am out of group
+2013-09-04 10:51:34.256 GCDTestPro[1044:1303] This is Task 1
+2013-09-04 10:51:34.257 GCDTestPro[1044:3d13] This is Task 3
+2013-09-04 10:51:34.256 GCDTestPro[1044:1b03] This is Task 2
+2013-09-04 10:51:34.257 GCDTestPro[1044:4003] This is Task 4
+2013-09-04 10:51:34.260 GCDTestPro[1044:4103] This is Task 5    
+2013-09-04 10:51:34.261 GCDTestPro[1044:1303] This is Task 6
+2013-09-04 10:51:34.261 GCDTestPro[1044:4303] This is Task 7
+2013-09-04 10:51:34.262 GCDTestPro[1044:4403] This is Task 8
+2013-09-04 10:51:34.267 GCDTestPro[1044:4403] All task in queue finished
+</code></pre>
+
+<h4>Dispatch_group_enter的使用：</h4>
+
+<pre><code>dispatch_group_t group = dispatch_group_create();
+
+MyCoreDataObject *coreDataObject;
+
+dispatch_group_enter(group);
+AFHTTPRequestOperation *operation1 =    [[AFHTTPRequestOperation alloc] initWithRequest:request1];
+[operation1 setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+coreDataObject.attribute1 = responseObject;
+sleep(5);
+dispatch_group_leave(group);
+}];
+[operation1 start];
+
+dispatch_group_enter(group);
+AFHTTPRequestOperation *operation2 = [[AFHTTPRequestOperation alloc] initWithRequest:request1];
+[operation2 setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+coreDataObject.attribute2 = responseObject;
+sleep(10);
+dispatch_group_leave(group);
+}];
+[operation2 start];
+
+dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+dispatch_release(group);
+
+[context save:nil];
+</code></pre>
 </div>
 
 
