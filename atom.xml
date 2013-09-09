@@ -4,7 +4,7 @@
   <title><![CDATA[JerryGa's Blog]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-09-04T13:30:51+08:00</updated>
+  <updated>2013-09-09T16:55:50+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[NSRunLoop And NSThread]]></title>
+    <link href="http://jerryga.github.com/blog/2013/09/09/nsrunloop-and-nsthread/"/>
+    <updated>2013-09-09T16:55:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/09/09/nsrunloop-and-nsthread</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[GCD]]></title>
@@ -357,6 +366,91 @@ dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 dispatch_release(group);
 
 [context save:nil];
+</code></pre>
+
+<h3>Dispatch_apply</h3>
+
+<p>定义：</p>
+
+<pre><code>dispatch_apply(size_t iterations, dispatch_queue_t queue, void (^block)(size_t));
+</code></pre>
+
+<p>参数 iterations 表示迭代的次数，void (<sup>block)(size_t)</sup> 是 block 循环体。</p>
+
+<p>Des：调用单一block多次，并平行运算，然后等待所有运算结束</p>
+
+<p>测试用例：</p>
+
+<pre><code>   NSMutableArray *testArray = [[NSMutableArray alloc] init];
+for (int i = 0; i &lt; 10; ++i) {
+    [testArray addObject:[NSString stringWithFormat:@"%d",i]];
+}
+int count = [testArray count];
+__block int sum = 0;
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_apply(count, queue, ^(size_t i) {
+    sum += [[testArray objectAtIndex:i] integerValue];
+    NSLog(@"sum is %d",sum);
+});
+NSLog(@"I am out of apply");
+</code></pre>
+
+<p>测试结果：</p>
+
+<pre><code>2013-09-05 10:06:28.285 GCDTestPro[738:1b03] sum is 1
+2013-09-05 10:06:28.285 GCDTestPro[738:4003] sum is 4
+2013-09-05 10:06:28.285 GCDTestPro[738:1303] sum is 1
+2013-09-05 10:06:28.285 GCDTestPro[738:c07] sum is 6
+2013-09-05 10:06:28.287 GCDTestPro[738:1b03] sum is 10
+2013-09-05 10:06:28.287 GCDTestPro[738:4003] sum is 15
+2013-09-05 10:06:28.287 GCDTestPro[738:c07] sum is 28
+2013-09-05 10:06:28.287 GCDTestPro[738:1303] sum is 21
+2013-09-05 10:06:28.289 GCDTestPro[738:1b03] sum is 36
+2013-09-05 10:06:28.289 GCDTestPro[738:4003] sum is 45
+2013-09-05 10:06:28.290 GCDTestPro[738:c07] I am out of apply
+</code></pre>
+
+<p>从测试结果可以看出，对于sum的操作是并行运算的。而用for循环测用例以及测试结果如下：</p>
+
+<pre><code> NSMutableArray *testArray = [[NSMutableArray alloc] init];
+for (int i = 0; i &lt; 10; ++i) {
+    [testArray addObject:[NSString stringWithFormat:@"%d",i]];
+}
+int count = [testArray count];
+int sum = 0;
+for (int i = 0; i &lt; count; ++i) {
+    sum += [[testArray objectAtIndex:i] integerValue];
+    NSLog(@"sum is %d",sum);
+}
+NSLog(@"I am out of for loop");
+</code></pre>
+
+<p>测试结果:</p>
+
+<pre><code>2013-09-05 10:10:02.770 GCDTestPro[783:c07] sum is 0
+2013-09-05 10:10:02.771 GCDTestPro[783:c07] sum is 1
+2013-09-05 10:10:02.771 GCDTestPro[783:c07] sum is 3
+2013-09-05 10:10:02.771 GCDTestPro[783:c07] sum is 6
+2013-09-05 10:10:02.772 GCDTestPro[783:c07] sum is 10
+2013-09-05 10:10:02.772 GCDTestPro[783:c07] sum is 15
+2013-09-05 10:10:02.772 GCDTestPro[783:c07] sum is 21
+2013-09-05 10:10:02.772 GCDTestPro[783:c07] sum is 28
+2013-09-05 10:10:02.773 GCDTestPro[783:c07] sum is 36
+2013-09-05 10:10:02.773 GCDTestPro[783:c07] sum is 45
+2013-09-05 10:10:02.773 GCDTestPro[783:c07] I am out of for loop
+</code></pre>
+
+<p><strong><em>需要明智地使用这项技术，因为dispatch queue的开销虽然非常小，但仍然存在，循环代码必须拥有足够的工作量，才能忽略掉dispatch queue的这些开销。</em></strong></p>
+
+<p>因为dispatch_apply会阻塞当前线程，如果想要在后台运行，用dispatch_async提交到queue即可：</p>
+
+<pre><code>dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+dispatch_async(queue, ^{
+    dispatch_apply(count, queue, ^(size_t i) {
+        sum += [[testArray objectAtIndex:i] integerValue];
+        NSLog(@"sum is %d",sum);
+    });
+});
 </code></pre>
 ]]></content>
   </entry>
