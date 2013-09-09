@@ -688,6 +688,104 @@ dispatch_async(queue, ^{
     });
 });
 </code></pre>
+
+<h3>Dispatch Source</h3>
+
+<p>dispatch source就像&#8221;WatchDog&#8221;，监视某些事件，当事件发生时，自动将一个block放入一个queue队列中执行。</p>
+
+<p>事件类型：</p>
+
+<pre><code> *  DISPATCH_SOURCE_TYPE_DATA_ADD:        n/a
+ *  DISPATCH_SOURCE_TYPE_DATA_OR:         n/a
+ *  DISPATCH_SOURCE_TYPE_MACH_SEND:       mach port (mach_port_t)
+ *  DISPATCH_SOURCE_TYPE_MACH_RECV:       mach port (mach_port_t)
+ *  DISPATCH_SOURCE_TYPE_PROC:            process identifier (pid_t)
+ *  DISPATCH_SOURCE_TYPE_READ:            file descriptor (int)
+ *  DISPATCH_SOURCE_TYPE_SIGNAL:          signal number (int)
+ *  DISPATCH_SOURCE_TYPE_TIMER:           n/a
+ *  DISPATCH_SOURCE_TYPE_VNODE:           file descriptor (int)
+ *  DISPATCH_SOURCE_TYPE_WRITE:           file descriptor (int)
+</code></pre>
+
+<p>Example：</p>
+
+<p>计时器类型：（DISPATCH_SOURCE_TYPE_TIMER）</p>
+
+<pre><code>dispatch_queue_t queue = dispatch_get_global_queue(
+                                DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+    // create our timer source
+   dispatch_source_t _timer = dispatch_source_create(
+                       DISPATCH_SOURCE_TYPE_TIMER, 0, 0,
+                       queue);
+
+    // set the time to fire (we're only going to fire once,
+    // so just fill in the initial time).
+    dispatch_source_set_timer(_timer,
+           dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_SEC),
+           DISPATCH_TIME_FOREVER, 0);
+
+    // Hey, let's actually do something when the timer fires!
+    dispatch_source_set_event_handler(_timer, ^{
+        NSLog(@"WATCHDOG: task took longer than %f seconds",
+                timeout);
+        // ensure we never fire again
+        dispatch_source_cancel(_timer);
+    });
+
+    // now that our timer is all set to go, start it
+    dispatch_resume(_timer);
+</code></pre>
+
+<p>读取文件类型：（DISPATCH_SOURCE_TYPE_READ）</p>
+
+<pre><code> const char* fileName = [[[NSBundle mainBundle] pathForResource:@"Test" ofType:@"txt"] UTF8String];
+int fd = open(fileName, O_NONBLOCK|O_RDONLY);    //设置type为读取
+dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, fd, 0, dispatch_get_main_queue());
+
+dispatch_source_set_event_handler(source, ^{
+    //每次读取的buffer
+    char buffer[1024];
+    //余下的size
+    size_t estimatedLength = dispatch_source_get_data(source);
+    //读取size
+    ssize_t bytesRead = read(fd, buffer, MIN(1024, estimatedLength));
+    if (bytesRead &lt; 0) {
+        if (errno != EAGAIN) {
+            printf("Unexpected error!");
+            abort();
+        }
+    } else if (bytesRead &gt; 0) {
+        printf("Got %ld bytes of data.%ld\n", bytesRead,estimatedLength);
+    } else {
+        printf("EOF encountered!\n");
+        dispatch_source_cancel(source);
+    }
+});
+
+dispatch_source_set_cancel_handler(source, ^{
+    printf("Cancel handler was called.\n");
+    close(fd);
+    dispatch_release(source);
+});
+
+dispatch_resume(source);
+</code></pre>
+
+<p>事件联结：</p>
+
+<pre><code>dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, dispatch_get_main_queue());
+dispatch_source_set_event_handler(source, ^{
+    [progressIndicator incrementBy:dispatch_source_get_data(source)];
+});
+dispatch_resume(source);
+
+dispatch_apply([array count], globalQueue, ^(size_t index) {
+    // do some work on data at index
+    dispatch_source_merge_data(source, 1);
+});
+    dispatch_resume(source);
+</code></pre>
 </div>
   
   
