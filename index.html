@@ -9,8 +9,8 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="NSRunLoop的特性： 每个线程都有一个Run Loop，主线程的Run Loop会在App运行时自动运行，子线程中需要手动运行。
+每个Run Loop都会以一个模式mode来运行，可以使用NSRunLoop的- (BOOL)runMode:(NSString )mode beforeDate &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,7 +95,139 @@
   </header>
 
 
-  <div class="entry-content">
+  <div class="entry-content"><h4>NSRunLoop的特性：</h4>
+
+<ol>
+<li>每个线程都有一个Run Loop，主线程的Run Loop会在App运行时自动运行，子线程中需要手动运行。</li>
+<li>每个Run Loop都会以一个模式mode来运行，可以使用NSRunLoop的- (BOOL)runMode:(NSString <em>)mode beforeDate:(NSDate </em>)limitDate 方法运行在某个特定模式mode。</li>
+<li>Run Loop的处理两大类事件源：Timer Source和Input Source(包括performSelector***方法簇、Port或者自定义Input Source)，每个事件源都会绑定在Run Loop的某个特定模式mode上，而且只有RunLoop在这个模式运行的时候才会触发该Timer和Input Source。</li>
+<li>如果没有任何事件源添加到Run Loop上，Run Loop就会立刻exit。</li>
+</ol>
+
+
+<h4>运行模式Mode</h4>
+
+<ol>
+<li>NSDefaultRunLoopMode: 默认的运行模式.</li>
+<li>NSRunLoopCommonModes: 是一组常用的模式集合,在iOS系统中NSRunLoopCommonMode包含NSDefaultRunLoopMode、NSTaskDeathCheckMode、UITrackingRunLoopMode. <strong><em>注意</em></strong>：让Run Loop运行在NSRunLoopCommonModes下是没有意义的，因为一个时刻Run Loop只能运行在一个特定模式下，而不可能是个模式集合。</li>
+<li>UITrackingRunLoopMode: 用于跟踪触摸事件触发的模式（例如UIScrollView上下滚动），主线程当触摸事件触发时会设置为这个模式，可以用来在控件事件触发过程中设置Timer。</li>
+<li>GSEventReceiveRunLoopMode: 用于接受系统事件，属于内部的Run Loop模式。</li>
+<li>自定义Mode:在coreFoundation中通过CFRunLoopAddCommonMode方法添加自定义Mode到NSRunLoopCommonModes中。</li>
+</ol>
+
+
+<h4>事件源</h4>
+
+<p>两类：Timer Source和Input Source(包括-performSelector:API调用簇，Port Input Source、自定义Input Source)
+图表：</p>
+
+<p><img src="/static/runLoop.png" alt="" /></p>
+
+<p>从上图可以看出Run Loop就是处理事件的一个循环，不同的是Timer Source事件处理后不会使Run Loop结束，而Input Source事件处理后会让Run Loop退出。因此你需要自己的一个Loop去不断运行Run Loop来处理事件，就像本文开头的示例那样。</p>
+
+<p>1) Timer Souce就是创建Timer添加到Run Loop中。需要注意的是scheduledTimerWith开头生成的Timer会自动帮你以默认NSDefaultRunLoopMode模式加载到当前的Run Loop中，而其他接口生成的Timer则需要你手动使用-addTimer:forMode添加到Run Loop中。需要额外注意的是Timer的触发不会让Run Loop返回。(Timer sources deliver events to their handler routines but do not cause the run loop to exit.) 。
+2) Input Source中的-performSelector:API调用簇方法，有以下这些接口：</p>
+
+<pre><code>performSelectorOnMainThread:withObject:waitUntilDone:
+performSelectorOnMainThread:withObject:waitUntilDone:modes:
+
+performSelector:onThread:withObject:waitUntilDone:
+performSelector:onThread:withObject:waitUntilDone:modes:
+
+performSelector:withObject:afterDelay:
+performSelector:withObject:afterDelay:inModes:
+
+cancelPreviousPerformRequestsWithTarget:
+cancelPreviousPerformRequestsWithTarget:selector:object:
+</code></pre>
+
+<p>3) Port Input Source：可以用NSMachPort作为线程之间的通讯通道。例如在主线程创建子线程时传入一个NSPort对象，这样主线程就可以和这个子线程通讯啦，如果要实现双向通讯，那么子线程也需要回传给主线程一个NSPort。NSPort的子类除了NSMachPort，还可以使用NSMessagePort或者Core Foundation中的CFMessagePortRef。
+注意：虽然有这么棒的方式实现线程间通讯方式，但是估计是由于危及iOS的Sandbox沙盒环境，所以这些API都是私有接口，如果你用到NSPortMessage，XCode会提示&#8217;NSPortMessage&#8217; for instance message is a forward declaration。</p>
+
+<p>4) 自定义Input Source：
+向Run Loop添加自定义Input Source只能使用Core Foundation的接口：CFRunLoopSourceCreate创建一个source，CFRunLoopAddSource向Run Loop中添加source，CFRunLoopRemoveSource从Run Loop中删除source，CFRunLoopSourceSignal通知source，CFRunLoopWakeUp唤醒Run Loop。
+Apple官方文档提供了一个自定义Input Source使用模式。</p>
+
+<p><img src="/static/runLoop001.png" alt="" /></p>
+
+<p>主线程持有包含子线程的Run Loop和Source的context对象，还有一个用于保存需要运行操作的数据buffer。主线程需要子线程干活时，首先将需要的操作数据添加到数据buffer，然后通知source，唤醒子线程Run Loop（因为子线程可能正在sleep状态，CFRunLoopWakeUp唤醒Run Loop可以通知线程醒来干活），由于子线程也持有这个source和数据buffer，因此在触发唤醒时可以使用这个数据buffer的数据来执行相关操作（需要注意数据buffer访问时的同步）。</p>
+
+<h4>Run Loop的Observer</h4>
+
+<p>Core Foundation层的接口可以定义一个Run Loop的观察者在Run Loop进入以下某个状态时得到通知：</p>
+
+<ol>
+<li>Run loop的进入</li>
+<li>Run loop处理一个Timer的时刻</li>
+<li>Run loop处理一个Input Source的时刻</li>
+<li>Run loop进入睡眠的时刻</li>
+<li>Run loop被唤醒的时刻，但在唤醒它的事件被处理之前</li>
+<li><p>Run loop的终止
+Observer的创建以及添加到Run Loop中需要使用Core Foundation的接口：</p>
+
+<pre><code>  CFRunLoopObserverContext  context = {0, (__bridge void *)(self), NULL, NULL, NULL};
+  CFRunLoopObserverRef observer = CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeTimers, YES, 0, &amp;myRunLoopObserver, &amp;context);
+  if (observer)
+  {
+  CFRunLoopAddObserver(CFRunLoopGetCurrent(), observer,
+                           kCFRunLoopCommonModes);
+                                                          }
+</code></pre>
+
+<p>   首先创建Observer的context，然后调用Core Foundation方法CFRunLoopObserverCreate创建Observer，再加入到当前线程的Run Loop中，注意CFRunLoopObserverCreate方法的第二个参数是Observer观察类型，有如下几种：</p>
+
+<pre><code>   /* Run Loop Observer Activities */
+   typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
+   kCFRunLoopEntry = (1UL &lt;&lt; 0),
+   kCFRunLoopBeforeTimers = (1UL &lt;&lt; 1),
+   kCFRunLoopBeforeSources = (1UL &lt;&lt; 2),
+   kCFRunLoopBeforeWaiting = (1UL &lt;&lt; 5),
+   kCFRunLoopAfterWaiting = (1UL &lt;&lt; 6),
+   kCFRunLoopExit = (1UL &lt;&lt; 7),
+   kCFRunLoopAllActivities = 0x0FFFFFFFU
+       };
+</code></pre></li>
+</ol>
+
+
+<p>对应Run Loop的各种事件，kCFRunLoopAllActivities比较特殊，可以观察所有事件。</p>
+
+<h4>总结</h4>
+
+<p>Run Loop就是一个处理事件源的循环，你可以控制这个Run Loop运行多久，如果当前没有事件发生，Run Loop会让这个线程进入睡眠状态(避免再浪费CPU时间)，如果有事件发生，Run Loop就处理这个事件。Run Loop处理事件和发送给Observer通知的流程如下：</p>
+
+<ol>
+<li>进入Run Loop运行，此时会通知观察者进入Run Loop；</li>
+<li>如果有Timer即将触发时，通知观察者；</li>
+<li>如果有非Port的Input Sourc即将e触发时，通知观察者；</li>
+<li>触发非Port的Input Source事件源；</li>
+<li>如果基于Port的Input Source事件源即将触发时，立即处理该事件，跳转到步骤9；</li>
+<li>通知观察者当前线程将进入休眠状态；</li>
+<li>将线程进入休眠状态直到有以下事件发生：基于Port的Input Source被触发、Timer被触发、Run Loop运行时间到了过期时间、Run Loop被唤醒。</li>
+<li>通知观察者线程将要被唤醒。</li>
+<li>处理被触发的事件：
+如果是用户自定义的Timer，处理Timer事件后重新启动Run Loop进入步骤2；
+如果线程被唤醒又没有到过期时间，则进入步骤2；
+如果是其他Input Source事件源有事件发生，直接处理这个事件；</li>
+<li>到达此步骤说明Run Loop运行时间到期，或者是非Timer的Input Source事件被处理后，Run Loop将要退出，退出前通知观察者线程已退出。</li>
+</ol>
+
+
+<p>什么时候需要用到Run Loop？官方文档的建议是：</p>
+
+<ol>
+<li>需要使用Port或者自定义Input Source与其他线程进行通讯。</li>
+<li>需要在线程中使用Timer。</li>
+<li>需要在线程上使用performSelector方法。</li>
+<li>需要让线程执行周期性的工作。</li>
+<li>我个人在开发中遇到的需要使用Run Loop的情况有：</li>
+<li>使用自定义Input Source和其他线程通信</li>
+<li>子线程中使用了定时器</li>
+<li>使用任何performSelector到子线程中运行方法</li>
+<li>使用子线程去执行周期性任务</li>
+<li>NSURLConnection在子线程中发起异步请求</li>
+</ol>
+
 </div>
   
   
