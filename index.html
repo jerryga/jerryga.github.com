@@ -9,8 +9,8 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="NSRunLoop的特性： 每个线程都有一个Run Loop，主线程的Run Loop会在App运行时自动运行，子线程中需要手动运行。
-每个Run Loop都会以一个模式mode来运行，可以使用NSRunLoop的- (BOOL)runMode:(NSString )mode beforeDate &hellip;">
+  <meta name="description" content="进度条Progress的使用 CCSize size = CCDirector::sharedDirector()-&gt;getWinSize(); CCProgressTo* p1 = CCProgressTo::create(2, 80);
+//第一个参数是时间， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,61 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/10/ccprogress/">CCProgress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T15:46:00+08:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>进度条Progress的使用</h4>
+
+<pre><code>CCSize size = CCDirector::sharedDirector()-&gt;getWinSize();
+
+ CCProgressTo* p1 = CCProgressTo::create(2, 80);
+//第一个参数是时间，第二个参数是表示只旋转或者伸长80%
+CCSprite *progressSprite = CCSprite::create("RedExpProgressBar.png");
+CCProgressTimer* pt = CCProgressTimer::create(progressSprite);
+//两种类型kCCProgressTimerTypeRadial和kCCProgressTimerTypeBar
+pt-&gt;setType(kCCProgressTimerTypeBar);
+pt-&gt;setMidpoint(CCPointMake(0, 0));
+pt-&gt;setBarChangeRate(CCPointMake(1, 0));
+addChild(pt);
+pt-&gt;setPosition(ccp(size.width / 3, size.height / 2));
+pt-&gt;runAction(CCRepeatForever::create(p1));
+</code></pre>
+
+<p>函数说明：</p>
+
+<p>setMidpoint()函数是设置进度条的起始点，（0,y）表示最左边，（1,,y）表示最右边，（x,1）表示最上面，（x,0）表示最下面。setBarChangeRate()函数是用来设置进度条动画方向的，（1,0）表示横方向，（0,1）表示纵方向。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1319,43 +1374,9 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/23/set-up-android-environment-on-mac/">Set Up Android Environment on Mac</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-23T17:59:00+08:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Step</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -1366,6 +1387,10 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/10/ccprogress/">CCProgress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/09/nsrunloop-and-nsthread/">NSRunLoop And NSThread</a>
@@ -1381,10 +1406,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
       <li class="post">
         <a href="/blog/2013/08/29/ruby-log/">Ruby Log</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/29/alipay/">Alipay</a>
       </li>
     
   </ul>

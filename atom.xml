@@ -4,7 +4,7 @@
   <title><![CDATA[JerryGa's Blog]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-09-09T17:45:14+08:00</updated>
+  <updated>2013-09-10T15:51:52+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CCProgress]]></title>
+    <link href="http://jerryga.github.com/blog/2013/09/10/ccprogress/"/>
+    <updated>2013-09-10T15:46:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/09/10/ccprogress</id>
+    <content type="html"><![CDATA[<h4>进度条Progress的使用</h4>
+
+<pre><code>CCSize size = CCDirector::sharedDirector()-&gt;getWinSize();
+
+ CCProgressTo* p1 = CCProgressTo::create(2, 80);
+//第一个参数是时间，第二个参数是表示只旋转或者伸长80%
+CCSprite *progressSprite = CCSprite::create("RedExpProgressBar.png");
+CCProgressTimer* pt = CCProgressTimer::create(progressSprite);
+//两种类型kCCProgressTimerTypeRadial和kCCProgressTimerTypeBar
+pt-&gt;setType(kCCProgressTimerTypeBar);
+pt-&gt;setMidpoint(CCPointMake(0, 0));
+pt-&gt;setBarChangeRate(CCPointMake(1, 0));
+addChild(pt);
+pt-&gt;setPosition(ccp(size.width / 3, size.height / 2));
+pt-&gt;runAction(CCRepeatForever::create(p1));
+</code></pre>
+
+<p>函数说明：</p>
+
+<p>setMidpoint()函数是设置进度条的起始点，（0,y）表示最左边，（1,,y）表示最右边，（x,1）表示最上面，（x,0）表示最下面。setBarChangeRate()函数是用来设置进度条动画方向的，（1,0）表示横方向，（0,1）表示纵方向。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[NSRunLoop And NSThread]]></title>
