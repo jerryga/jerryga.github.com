@@ -9,8 +9,7 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="进度条Progress的使用 CCSize size = CCDirector::sharedDirector()-&gt;getWinSize(); CCProgressTo* p1 = CCProgressTo::create(2, 80);
-//第一个参数是时间， &hellip;">
+  <meta name="description" content="Diff 两者的主要区别是：objc_msgSend不会通过编译器进行类型检查。在ARC中，如果使用performSelector可能会得到警告 #warning：PerformSelector may cause a leak because its selector is unknown. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -39,7 +38,7 @@
   <header role="banner"><hgroup>
   <h1><a href="/">JerryGa's Blog</a></h1>
   
-    <h2>Sunshine</h2>
+    <h2>Skating In the Rain.</h2>
   
 </hgroup>
 
@@ -66,6 +65,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/13/objc-msgsend-vs-performselector/">objc_msgSend() vs performSelector</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-13T15:43:00+08:00" pubdate data-updated="true">Sep 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>Diff</h4>
+
+<p>两者的主要区别是：objc_msgSend不会通过编译器进行类型检查。在ARC中，如果使用performSelector可能会得到警告</p>
+
+<pre><code>#warning：PerformSelector may cause a leak because its selector is unknown.
+</code></pre>
+
+<p>在xcode4.2 LLVM3.0的环境下,可以这样消除警告：</p>
+
+<pre><code>#define SuppressPerformSelectorLeakWarning(Stuff) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+Stuff; \
+_Pragma("clang diagnostic pop") \
+} while (0)
+</code></pre>
+
+<p>这样使用：</p>
+
+<pre><code>SuppressPerformSelectorLeakWarning(
+
+            [_target performSelector:_responseSel   withObject:_sectionModel];
+    );
+</code></pre>
+
+<p>使用objc_msgSend(<em>target, </em>responseSel);虽然也可以消除警告，但是由于objc_msgSend()不会进行类型检查，所以建议尽量不要这样做。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1336,44 +1397,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/23/okay/">OKay</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-23T19:52:00+08:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This is me~ A Coding Runner</p>
-
-<p><img src="/static/Ga.png" alt="" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1389,6 +1412,10 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/13/objc-msgsend-vs-performselector/">objc_msgSend() VS performSelector</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/10/ccprogress/">CCProgress</a>
       </li>
     
@@ -1402,10 +1429,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
       <li class="post">
         <a href="/blog/2013/08/30/markdownyu-fa-shuo-ming/">MarkDown语法说明</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/29/ruby-log/">Ruby Log</a>
       </li>
     
   </ul>

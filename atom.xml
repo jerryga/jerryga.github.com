@@ -4,7 +4,7 @@
   <title><![CDATA[JerryGa's Blog]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-09-10T15:51:52+08:00</updated>
+  <updated>2013-09-13T16:03:47+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[objc_msgSend() VS performSelector]]></title>
+    <link href="http://jerryga.github.com/blog/2013/09/13/objc-msgsend-vs-performselector/"/>
+    <updated>2013-09-13T15:43:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/09/13/objc-msgsend-vs-performselector</id>
+    <content type="html"><![CDATA[<h4>Diff</h4>
+
+<p>两者的主要区别是：objc_msgSend不会通过编译器进行类型检查。在ARC中，如果使用performSelector可能会得到警告</p>
+
+<pre><code>#warning：PerformSelector may cause a leak because its selector is unknown.
+</code></pre>
+
+<p>在xcode4.2 LLVM3.0的环境下,可以这样消除警告：</p>
+
+<pre><code>#define SuppressPerformSelectorLeakWarning(Stuff) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+Stuff; \
+_Pragma("clang diagnostic pop") \
+} while (0)
+</code></pre>
+
+<p>这样使用：</p>
+
+<pre><code>SuppressPerformSelectorLeakWarning(
+
+            [_target performSelector:_responseSel   withObject:_sectionModel];
+    );
+</code></pre>
+
+<p>使用objc_msgSend(<em>target, </em>responseSel);虽然也可以消除警告，但是由于objc_msgSend()不会进行类型检查，所以建议尽量不要这样做。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CCProgress]]></title>
