@@ -4,7 +4,7 @@
   <title><![CDATA[JerryGa's Blog]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-09-13T16:03:47+08:00</updated>
+  <updated>2013-09-17T17:33:43+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[APNS]]></title>
+    <link href="http://jerryga.github.com/blog/2013/09/17/apns/"/>
+    <updated>2013-09-17T17:28:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/09/17/apns</id>
+    <content type="html"><![CDATA[<h4>APNS</h4>
+
+<p><img src="http://jerryga.github.com/static/apns.png" alt="" /></p>
+
+<p>生成pem文件：</p>
+
+<pre><code>openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12
+
+openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev-key.p12
+</code></pre>
+
+<p>将key和许可文件合成为apns-dev.pem</p>
+
+<pre><code>cat apns-dev-cert.pem apns-dev-key-noenc.pem &gt; apns-dev.pem
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[objc_msgSend() VS performSelector]]></title>

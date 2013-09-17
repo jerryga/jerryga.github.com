@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Set up Android Environment On Mac - JerryGa's Blog</title>
+  <title>APNS - JerryGa's Blog</title>
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="Step
-">
+  <meta name="description" content="APNS 生成pem文件： openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12 openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jerryga.github.com/blog/2013/05/23/set-up-android-environment-on-mac">
+  <link rel="canonical" href="http://jerryga.github.com/blog/2013/09/17/apns">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JerryGa's Blog" type="application/atom+xml">
@@ -69,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Set Up Android Environment on Mac</h1>
+      <h1 class="entry-title">APNS</h1>
     
     
       <p class="meta">
@@ -85,14 +84,28 @@
   
 
 
-<time datetime="2013-05-23T17:59:00+08:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+<time datetime="2013-09-17T17:28:00+08:00" pubdate data-updated="true">Sep 17<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Step</p>
+<div class="entry-content"><h4>APNS</h4>
+
+<p><img src="/static/apns.png" alt="" /></p>
+
+<p>生成pem文件：</p>
+
+<pre><code>openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12
+
+openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev-key.p12
+</code></pre>
+
+<p>将key和许可文件合成为apns-dev.pem</p>
+
+<pre><code>cat apns-dev-cert.pem apns-dev-key-noenc.pem &gt; apns-dev.pem
+</code></pre>
 </div>
 
 
@@ -115,7 +128,7 @@
   
 
 
-<time datetime="2013-05-23T17:59:00+08:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+<time datetime="2013-09-17T17:28:00+08:00" pubdate data-updated="true">Sep 17<span>th</span>, 2013</time>
       
 
 
@@ -123,7 +136,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/05/23/set-up-android-environment-on-mac/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/05/23/set-up-android-environment-on-mac/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/09/17/apns/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/09/17/apns/" >Tweet</a>
   
   
   
@@ -132,8 +145,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2013/09/13/objc-msgsend-vs-performselector/" title="Previous Post: objc_msgSend() VS performSelector">&laquo; objc_msgSend() VS performSelector</a>
       
-        <a class="basic-alignment right" href="/blog/2013/05/23/okay/" title="Next Post: OKay">OKay &raquo;</a>
       
     </p>
   </footer>

@@ -9,7 +9,7 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="Diff 两者的主要区别是：objc_msgSend不会通过编译器进行类型检查。在ARC中，如果使用performSelector可能会得到警告 #warning：PerformSelector may cause a leak because its selector is unknown. &hellip;">
+  <meta name="description" content="APNS 生成pem文件： openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12 openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/17/apns/">APNS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-17T17:28:00+08:00" pubdate data-updated="true">Sep 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>APNS</h4>
+
+<p><img src="/static/apns.png" alt="" /></p>
+
+<p>生成pem文件：</p>
+
+<pre><code>openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12
+
+openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev-key.p12
+</code></pre>
+
+<p>将key和许可文件合成为apns-dev.pem</p>
+
+<pre><code>cat apns-dev-cert.pem apns-dev-key-noenc.pem &gt; apns-dev.pem
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1289,114 +1339,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/24/http-test-app-for-mac/">Http Test App for Mac</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-24T11:47:00+08:00" pubdate data-updated="true">May 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>A http app for mac to test http connect</strong></p>
-
-<h1>&#8216;Http&#8217; App Info</h1>
-
-<h2>Version 1.X ????/??/??</h2>
-
-<h3>Description:</h3>
-
-<ul>
-<li>HTTP test Client</li>
-<li>used for：at least mac os10.7</li>
-<li>DownLoad:<a href="https://github.com/jerryga/Http.git">https://github.com/jerryga/Http.git</a></li>
-<li>URL：eg：http://www.google.com</li>
-<li>Go: start test.</li>
-<li>Method: Get/Post
-<strong>note</strong>only get and post method，others ,I will update soon.</li>
-<li><p>Parameter Type：</p>
-
-<pre><code>            XML：body string format： 
-            &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;id&gt;10002&lt;/id&gt;&lt;name&gt;ga&lt;/name&gt; 
-             body type：NSData
-            **note**xml version 1.0 encoding UTF-8
-             Request Method：Post
-
-            JSON:body string format：{"id":"10002","name":"ga"} 
-            body type：NSData
-            Request Method：Post
-
-            URLPar:Parameter：url?id=10002&amp;name=ga 
-            Request Method：Get **note**the normal method，append parameter after url.
-</code></pre></li>
-<li><p>T1 table：Add HeadField，for example,content-type、Accept,and so on&#8230;</p></li>
-<li><p>T2 table：Add Parameter：</p>
-
-<pre><code>          *1.if you choose ParameterType XML：
-          parameter column，Required
-          value column：Optional.
-          eg1.0：
-          parameter   value
-          info
-          name        ga
-          then generate XML format：
-           &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;Info&gt;&lt;name&gt;ga&lt;/name&gt;&lt;/Info&gt; 
-          eg1.1：
-          parameter column   value column
-          info        hello
-          name        ga
-          then generate XML format：
-           &lt;?xml version = "1.0" encoding = "UTF-8"?&gt;&lt;Info&gt;hello&lt;/Info&gt;&lt;name&gt;ga&lt;/name&gt; 
-          *2.if you choose ParameterType JSON：
-              parameter column，Required
-              value column：Optional。
-              eg：2.1
-          parameter column   value column
-          info        hello
-          name        ga
-          then generate Json format：
-           {"name":"ga","Info":"hello"} 
-           *3.ParameterType URLPar：No practical significance，but if you choose Get Method, it is Required.
-</code></pre></li>
-<li><p>Function Button：’+‘、’-‘：add or delete row。</p></li>
-<li>R：Result TextView。It will print head fields、result、error、errorCode。</li>
-</ul>
-
-
-<h3>Note</h3>
-
-<ul>
-<li>Only for ios http test,  NO Considered web develop and so on&#8230;</li>
-<li>Refered for Fetcher.</li>
-<li>Copyright © 2013 Jerry GaGa</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1412,6 +1354,10 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/17/apns/">APNS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/13/objc-msgsend-vs-performselector/">objc_msgSend() VS performSelector</a>
       </li>
     
@@ -1425,10 +1371,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
       <li class="post">
         <a href="/blog/2013/08/30/gcd/">GCD</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/30/markdownyu-fa-shuo-ming/">MarkDown语法说明</a>
       </li>
     
   </ul>
