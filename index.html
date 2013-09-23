@@ -9,7 +9,8 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="APNS 生成pem文件： openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12 openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev &hellip;">
+  <meta name="description" content="ios7
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,78 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/23/ios7/">Ios7</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T11:35:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3><a href="http://onevcat.com/2013/06/developer-should-know-about-ios7/">ios7</a></h3>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/18/block/">Block</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-18T11:23:00+08:00" pubdate data-updated="true">Sep 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1150,195 +1223,6 @@ dispatch_apply([array count], globalQueue, ^(size_t index) {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/iosde-san-wei-tou-shi-tou-ying-%28zhuan-%7Clu-ke-%29/">Ios的三维透视投影（转|卢克）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-27T17:13:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>一.概述
-在iOS中使用CATransform3D这个结构体来表示三维的齐次坐标变换矩阵. 齐次坐标是一种坐标的表示方法，n维空间的坐标需要用n+1个元素的坐标元组来表示,在Quartz 2D Transform中就有关于齐次坐标的应用,那边是关于二维空间的变换，其某点的齐次坐标的最后一个元素始终设置为1。使用齐次坐标而不是简单的数学坐标是为了方便图形进行仿射变换，仿射变换可以通过仿射变换矩阵来实现，3D的仿射变换可以实现诸如 平移(translation)，旋转(rotation),缩放(scaling),切变(shear)等变换。如果不用齐次坐标那么进行坐标变换可能就涉及到两种运算了，加法（平移）和乘法（旋转，缩放），而使用齐次坐标以及齐次坐标变换矩阵后只需要矩阵乘法就可以完成一切了。上面的这些如果需要深入了解就需要去学习一下图形变换的相关知识，自己对矩阵的乘法进行演算。
-iOS中的CALayer的3D本质上并不能算真正的3D(其视点即观察点或者所谓的照相机的位置是无法变换的),而只是3D在二维平面上的投影，投影平面就是手机屏幕也就是xy轴组成的平面(注意iOS中为左手坐标系)，那么视点的位置是如何确定的呢？可以通过CATransform3D中的m34来间接指定， m34 = -1/z,其中z为观察点在z轴上的值,而Layer的z轴的位置则是通过anchorPoint来指定的，所谓的anchorPoint(锚点)就是在变换中保持不变的点，也就是某个Layer在变换中的原点,xyz三轴相交于此点。在iOS中，Layer的anchorPoint使用unit coordinate space来描述，unit coordinate space无需指定具体真实的坐标点而是使用layer bounds中的相对位置，下图展示了一个Layer中的几个特殊的锚点,</p>
-
-<p><img src="/static/7525485756_6782ed8ce6.png" alt="" /></p>
-
-<p>m34 = -1/z中，当z为正的时候，是我们人眼观察现实世界的效果，即在投影平面上表现出近大远小的效果，z越靠近原点则这种效果越明显，越远离原点则越来越不明显，当z为正无穷大的时候，则失去了近大远小的效果，此时投影线垂直于投影平面，也就是视点在无穷远处，CATransform3D中m34的默认值为0，即视点在无穷远处.
-还有一个需要说明一下的就是齐次坐标到数学坐标的转换 通用的齐次坐标为 (a, b, c, h),其转换成数学坐标则为 (a/h, b/h, c/h).
-二.代数解释
-假设一个Layer anchorPoint为默认的 (0.5, 0.5 ), 其三维空间中一个A点 (6, 0, 0)，m34 = -1/1000.0, 则此点往z轴负方向移动10个单位之后，则在投影平面上看到的点的坐标是多少呢？
-A点使用齐次坐标表示为 (6, 0, 0, 1)
-QuartzCore框架为我们提供了函数来算出所需要的矩阵，</p>
-
-<pre><code>CATransform3D transform = CATransform3DIdentity;
-transform.m34 = -1/1000.0;
-transform = CATransform3DTranslate(transform, 0, 0, -10);
-</code></pre>
-
-<p>计算出来的矩阵为</p>
-
-<p>{ 1,    0,    0,     0; <br/>
-  0,    1,    0,     0; <br/>
-  0,    0,    1,     -0.001; <br/>
-  0,    0,  -10,    1.01;    <br/>
-} <br/>
-其实上面的变换矩阵本质上是两个矩阵相乘得到的 变换矩阵 * 投影矩阵 变换矩阵为
-{1,    0,    0,    0; <br/>
- 0,    1,    0,    0; <br/>
- 0,    0,    1,    0; <br/>
- 0,    0,   -10,  1;    <br/>
-}   <br/>
-投影矩阵为</p>
-
-<p>{1,    0,    0,    0; <br/>
- 0,    1,    0,    0; <br/>
- 0,    0,    1, -0.001; <br/>
- 0,    0,    0,    1; <br/>
-}   <br/>
-上面的两个矩阵相乘则会得到最终的变换矩阵(如果忘记矩阵乘法的可以去看下线性代数复习下)，所以一个矩阵就可以完成变换和投影。
-将A点坐标乘上最终的变换矩阵，则得到 {6, 0 , -10, 1.01}, 转换成数学坐标点为 {6/1.01, 0, 10/1.01},则可以知道其在投影平面上的投影点为 {6/1.01, 0, 0} 也就是我们看到的变换后的点。其比之前较靠近原点。越往z轴负方向移动，则在投影平面上越靠近原点。
-三.几何解释
-将上面的例子使用几何的方式来进行解释分析，当我们沿着y轴的正方向向下看时候，可以得到如下的景象</p>
-
-<p><img src="/static/7525866072_efebf5cd22.png" alt="" /></p>
-
-<p>虚线为投影线，其和x轴的交点即为A点的投影点。 由相似三角形的定理我们很容易算出投影的点，
-1000/(1000 + 10) = x/6,则x = 6*1000/1010 = 6/1.01</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/27/catransform3d/">CATransform3D</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-27T16:25:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>1 CATransform3D结构成员的意义：</h3>
-
-<p>strct CATransform3D {</p>
-
-<pre><code>CGFloat m11（x缩放）, m12（y切变）, m13（旋转）, m14（）;
-CGFloat m21（x切变）, m22（y缩放）, m23（）, m24（）;
-CGFloat m31（旋转）, m32（）, m33（）, m34（透视效果，要操作   的这个对象要有旋转的角度，否则没有效果。正直/负值都有意义）;
-CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
-</code></pre>
-
-<p>};</p>
-
-<p>整体比例变换时（m11 == m22），若m33>1,图形整体缩小，若0&lt;m33&lt;1,图形整体放大，若s&lt;0,则发烧关于原点的对称等比变换。</p>
-
-<h3>2 CATransform3DMakeTranslation</h3>
-
-<p>CATransform3DMakeTranslation(0, 0, 0) 创建了一个4*4的单位矩阵。</p>
-
-<h3>3 CATransform3DMakeRotation And CATransform3DRotate</h3>
-
-<h3>4 翻转动画</h3>
-
-<ul>
-<li><p>(void)animationCubeRotate:(RotateDirection)directionwithDuration:(float)duration
-{
-  [CATransaction flush];
-  CGFloat height = self.bounds.size.height;
-  CABasicAnimation <em>rotation;
-  // CABasicAnimation </em>translationX;  // 如果沿X轴翻转,则用不到这个变量.
-  CABasicAnimation <em>translationY; // 如果沿Y轴翻转,则用不到这个变量.
-  CABasicAnimation </em>translationZ;
-  CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
-  animationGroup.delegate = self;
-  animationGroup.duration = duration;</p>
-
-<p>  if ( direction == RotateFromBottom )
-  {</p>
-
-<pre><code>  // 创建(某方向)关键帧动画.
-  translationY = [CABasicAnimation animationWithKeyPath:
-                  @"sublayerTransform.translation.y"];
-  translationY.toValue = [NSNumber numberWithFloat:-(height / 2)];【2】
-  rotation = [CABasicAnimation animationWithKeyPath:
-              @"sublayerTransform.rotation.x"];
-  rotation.toValue = [NSNumber numberWithFloat:D2R(-90.0f)];
-</code></pre>
-
-<p>  }
-  else if ( direction == RotateFromTop )
-  {
-  }</p>
-
-<p>  // 处理Z轴
-  translationZ = [CABasicAnimation animationWithKeyPath:</p>
-
-<pre><code>              @"sublayerTransform.translation.z"];
-</code></pre>
-
-  translationZ.toValue = [NSNumber numberWithFloat:height / 2];【3】
-  animationGroup.animations =
-
-<pre><code>  [NSArray arrayWithObjects: rotation, translationY, translationZ, nil];
-</code></pre>
-
-<p>  animationGroup.fillMode = kCAFillModeForwards;
-  animationGroup.removedOnCompletion = NO;
-  [_transformedLayer addAnimation:animationGroup forKey:kAnimationKey];
-}</p></li>
-</ul>
-
-
-<p>*针对X轴旋转，就是1，0，0，针对Y轴旋转，就是0，1，0&#8230;下面那行也要进行正确的转换。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1354,6 +1238,14 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/23/ios7/">ios7</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/18/block/">Block</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/17/apns/">APNS</a>
       </li>
     
@@ -1363,14 +1255,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
       <li class="post">
         <a href="/blog/2013/09/10/ccprogress/">CCProgress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/09/nsrunloop-and-nsthread/">NSRunLoop And NSThread</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/30/gcd/">GCD</a>
       </li>
     
   </ul>

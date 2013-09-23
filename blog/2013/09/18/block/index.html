@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>objc_msgSend() VS performSelector - JerryGa's Blog</title>
+  <title>Block - JerryGa's Blog</title>
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="Diff 两者的主要区别是：objc_msgSend不会通过编译器进行类型检查。在ARC中，如果使用performSelector可能会得到警告 #warning：PerformSelector may cause a leak because its selector is unknown. &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jerryga.github.com/blog/2013/09/13/objc-msgsend-vs-performselector">
+  <link rel="canonical" href="http://jerryga.github.com/blog/2013/09/18/block">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JerryGa's Blog" type="application/atom+xml">
@@ -68,7 +69,7 @@
   
   <header>
     
-      <h1 class="entry-title">objc_msgSend() vs performSelector</h1>
+      <h1 class="entry-title">Block</h1>
     
     
       <p class="meta">
@@ -84,40 +85,14 @@
   
 
 
-<time datetime="2013-09-13T15:43:00+08:00" pubdate data-updated="true">Sep 13<span>th</span>, 2013</time>
+<time datetime="2013-09-18T11:23:00+08:00" pubdate data-updated="true">Sep 18<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h4>Diff</h4>
-
-<p>两者的主要区别是：objc_msgSend不会通过编译器进行类型检查。在ARC中，如果使用performSelector可能会得到警告</p>
-
-<pre><code>#warning：PerformSelector may cause a leak because its selector is unknown.
-</code></pre>
-
-<p>在xcode4.2 LLVM3.0的环境下,可以这样消除警告：</p>
-
-<pre><code>#define SuppressPerformSelectorLeakWarning(Stuff) \
-do { \
-_Pragma("clang diagnostic push") \
-_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
-Stuff; \
-_Pragma("clang diagnostic pop") \
-} while (0)
-</code></pre>
-
-<p>这样使用：</p>
-
-<pre><code>SuppressPerformSelectorLeakWarning(
-
-            [_target performSelector:_responseSel   withObject:_sectionModel];
-    );
-</code></pre>
-
-<p>使用objc_msgSend(<em>target, </em>responseSel);虽然也可以消除警告，但是由于objc_msgSend()不会进行类型检查，所以建议尽量不要这样做。</p>
+<div class="entry-content">
 </div>
 
 
@@ -140,7 +115,7 @@ _Pragma("clang diagnostic pop") \
   
 
 
-<time datetime="2013-09-13T15:43:00+08:00" pubdate data-updated="true">Sep 13<span>th</span>, 2013</time>
+<time datetime="2013-09-18T11:23:00+08:00" pubdate data-updated="true">Sep 18<span>th</span>, 2013</time>
       
 
 
@@ -148,7 +123,7 @@ _Pragma("clang diagnostic pop") \
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/09/13/objc-msgsend-vs-performselector/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/09/13/objc-msgsend-vs-performselector/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/09/18/block/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/09/18/block/" >Tweet</a>
   
   
   
@@ -157,10 +132,10 @@ _Pragma("clang diagnostic pop") \
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/09/10/ccprogress/" title="Previous Post: CCProgress">&laquo; CCProgress</a>
+        <a class="basic-alignment left" href="/blog/2013/09/17/apns/" title="Previous Post: APNS">&laquo; APNS</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/09/17/apns/" title="Next Post: APNS">APNS &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/09/23/ios7/" title="Next Post: ios7">ios7 &raquo;</a>
       
     </p>
   </footer>
