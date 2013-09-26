@@ -9,8 +9,8 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="ios7
-">
+  <meta name="description" content="ios7: //viewDidLoad [self prefersStatusBarHidden]; [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)]; // Add this Method
+- (BOOL) &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,62 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/26/ios7-statusbarhidden/">Ios7 StatusBarHidden</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-26T15:10:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>ios7:</h4>
+
+<pre><code>//viewDidLoad
+
+[self prefersStatusBarHidden];
+    [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+
+// Add this Method
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+</code></pre>
+
+<h4>&lt; ios7</h4>
+
+<pre><code>In info.plist add this key-value:
+
+Key: View controller-based status bar appearance
+Value: NO
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1184,45 +1240,6 @@ dispatch_apply([array count], globalQueue, ^(size_t index) {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/29/alipay/">Alipay</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-29T23:03:00+08:00" pubdate data-updated="true">Aug 29<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>在ios支付宝相关测试中：报错：<strong><em>rsa_private read error : private key is NULL</em></strong>###原因：私钥没有转成PKCS8####解决方法：</h3>
-
-<p>1.在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;&#8212;&#8211;BEGIN PRIVATE KEY&#8212;&#8211;\n&#8221;]; 将其改成 [result appendString:@&#8221;&#8212;&#8211;BEGIN RSA PRIVATE KEY&#8212;&#8211;\n&#8221;];
-2.在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;\n&#8212;&#8211;END PRIVATE KEY&#8212;&#8211;&#8221;]; 将其改成 [result appendString:@&#8221;\n&#8212;&#8211;END RSA PRIVATE KEY&#8212;&#8211;&#8221;];</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1238,6 +1255,10 @@ dispatch_apply([array count], globalQueue, ^(size_t index) {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/26/ios7-statusbarhidden/">ios7 StatusBarHidden</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/23/ios7/">ios7</a>
       </li>
     
@@ -1251,10 +1272,6 @@ dispatch_apply([array count], globalQueue, ^(size_t index) {
     
       <li class="post">
         <a href="/blog/2013/09/13/objc-msgsend-vs-performselector/">objc_msgSend() VS performSelector</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/10/ccprogress/">CCProgress</a>
       </li>
     
   </ul>

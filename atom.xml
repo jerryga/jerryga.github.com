@@ -4,7 +4,7 @@
   <title><![CDATA[JerryGa's Blog]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-09-23T11:39:32+08:00</updated>
+  <updated>2013-09-26T15:14:14+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ios7 StatusBarHidden]]></title>
+    <link href="http://jerryga.github.com/blog/2013/09/26/ios7-statusbarhidden/"/>
+    <updated>2013-09-26T15:10:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/09/26/ios7-statusbarhidden</id>
+    <content type="html"><![CDATA[<h4>ios7:</h4>
+
+<pre><code>//viewDidLoad
+
+[self prefersStatusBarHidden];
+    [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+
+// Add this Method
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+</code></pre>
+
+<h4>&lt; ios7</h4>
+
+<pre><code>In info.plist add this key-value:
+
+Key: View controller-based status bar appearance
+Value: NO
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ios7]]></title>

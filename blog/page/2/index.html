@@ -9,8 +9,7 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="一.概述
-在iOS中使用CATransform3D这个结构体来表示三维的齐次坐标变换矩阵. 齐次坐标是一种坐标的表示方法，n维空间的坐标需要用n+1个元素的坐标元组来表示,在Quartz 2D Transform中就有关于齐次坐标的应用,那边是关于二维空间的变换， &hellip;">
+  <meta name="description" content="在ios支付宝相关测试中：报错：rsa_private read error : private key is NULL###原因：私钥没有转成PKCS8####解决方法： 1.在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;&#8212 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/29/alipay/">Alipay</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-29T23:03:00+08:00" pubdate data-updated="true">Aug 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>在ios支付宝相关测试中：报错：<strong><em>rsa_private read error : private key is NULL</em></strong>###原因：私钥没有转成PKCS8####解决方法：</h3>
+
+<p>1.在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;&#8212;&#8211;BEGIN PRIVATE KEY&#8212;&#8211;\n&#8221;]; 将其改成 [result appendString:@&#8221;&#8212;&#8211;BEGIN RSA PRIVATE KEY&#8212;&#8211;\n&#8221;];
+2.在RSADataSigner.m文件中 搜索代码 [result appendString:@&#8221;\n&#8212;&#8211;END PRIVATE KEY&#8212;&#8211;&#8221;]; 将其改成 [result appendString:@&#8221;\n&#8212;&#8211;END RSA PRIVATE KEY&#8212;&#8211;&#8221;];</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -453,6 +491,10 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/26/ios7-statusbarhidden/">ios7 StatusBarHidden</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/23/ios7/">ios7</a>
       </li>
     
@@ -466,10 +508,6 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
       <li class="post">
         <a href="/blog/2013/09/13/objc-msgsend-vs-performselector/">objc_msgSend() VS performSelector</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/10/ccprogress/">CCProgress</a>
       </li>
     
   </ul>

@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>CATransform3D - JerryGa's Blog</title>
+  <title>ios7 StatusBarHidden - JerryGa's Blog</title>
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="1 CATransform3D结构成员的意义： strct CATransform3D { CGFloat m11（x缩放）, m12（y切变）, m13（旋转）, m14（）;
-CGFloat m21（x切变）, m22（y缩放）, m23（）, m24（）;
-CGFloat m31（旋转）, &hellip;">
+  <meta name="description" content="ios7: //viewDidLoad [self prefersStatusBarHidden]; [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)]; // Add this Method
+- (BOOL) &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@ CGFloat m31（旋转）, &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jerryga.github.com/blog/2013/05/27/catransform3d">
+  <link rel="canonical" href="http://jerryga.github.com/blog/2013/09/26/ios7-statusbarhidden">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JerryGa's Blog" type="application/atom+xml">
@@ -70,7 +69,7 @@ CGFloat m31（旋转）, &hellip;">
   
   <header>
     
-      <h1 class="entry-title">CATransform3D</h1>
+      <h1 class="entry-title">Ios7 StatusBarHidden</h1>
     
     
       <p class="meta">
@@ -86,85 +85,34 @@ CGFloat m31（旋转）, &hellip;">
   
 
 
-<time datetime="2013-05-27T16:25:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
+<time datetime="2013-09-26T15:10:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>1 CATransform3D结构成员的意义：</h3>
+<div class="entry-content"><h4>ios7:</h4>
 
-<p>strct CATransform3D {</p>
+<pre><code>//viewDidLoad
 
-<pre><code>CGFloat m11（x缩放）, m12（y切变）, m13（旋转）, m14（）;
-CGFloat m21（x切变）, m22（y缩放）, m23（）, m24（）;
-CGFloat m31（旋转）, m32（）, m33（）, m34（透视效果，要操作   的这个对象要有旋转的角度，否则没有效果。正直/负值都有意义）;
-CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
-</code></pre>
+[self prefersStatusBarHidden];
+    [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
 
-<p>};</p>
-
-<p>整体比例变换时（m11 == m22），若m33>1,图形整体缩小，若0&lt;m33&lt;1,图形整体放大，若s&lt;0,则发烧关于原点的对称等比变换。</p>
-
-<h3>2 CATransform3DMakeTranslation</h3>
-
-<p>CATransform3DMakeTranslation(0, 0, 0) 创建了一个4*4的单位矩阵。</p>
-
-<h3>3 CATransform3DMakeRotation And CATransform3DRotate</h3>
-
-<h3>4 翻转动画</h3>
-
-<ul>
-<li><p>(void)animationCubeRotate:(RotateDirection)directionwithDuration:(float)duration
+// Add this Method
+- (BOOL)prefersStatusBarHidden
 {
-  [CATransaction flush];
-  CGFloat height = self.bounds.size.height;
-  CABasicAnimation <em>rotation;
-  // CABasicAnimation </em>translationX;  // 如果沿X轴翻转,则用不到这个变量.
-  CABasicAnimation <em>translationY; // 如果沿Y轴翻转,则用不到这个变量.
-  CABasicAnimation </em>translationZ;
-  CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
-  animationGroup.delegate = self;
-  animationGroup.duration = duration;</p>
-
-<p>  if ( direction == RotateFromBottom )
-  {</p>
-
-<pre><code>  // 创建(某方向)关键帧动画.
-  translationY = [CABasicAnimation animationWithKeyPath:
-                  @"sublayerTransform.translation.y"];
-  translationY.toValue = [NSNumber numberWithFloat:-(height / 2)];【2】
-  rotation = [CABasicAnimation animationWithKeyPath:
-              @"sublayerTransform.rotation.x"];
-  rotation.toValue = [NSNumber numberWithFloat:D2R(-90.0f)];
+    return YES;
+}
 </code></pre>
 
-<p>  }
-  else if ( direction == RotateFromTop )
-  {
-  }</p>
+<h4>&lt; ios7</h4>
 
-<p>  // 处理Z轴
-  translationZ = [CABasicAnimation animationWithKeyPath:</p>
+<pre><code>In info.plist add this key-value:
 
-<pre><code>              @"sublayerTransform.translation.z"];
+Key: View controller-based status bar appearance
+Value: NO
 </code></pre>
-
-  translationZ.toValue = [NSNumber numberWithFloat:height / 2];【3】
-  animationGroup.animations =
-
-<pre><code>  [NSArray arrayWithObjects: rotation, translationY, translationZ, nil];
-</code></pre>
-
-<p>  animationGroup.fillMode = kCAFillModeForwards;
-  animationGroup.removedOnCompletion = NO;
-  [_transformedLayer addAnimation:animationGroup forKey:kAnimationKey];
-}</p></li>
-</ul>
-
-
-<p>*针对X轴旋转，就是1，0，0，针对Y轴旋转，就是0，1，0&#8230;下面那行也要进行正确的转换。</p>
 </div>
 
 
@@ -187,7 +135,7 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
   
 
 
-<time datetime="2013-05-27T16:25:00+08:00" pubdate data-updated="true">May 27<span>th</span>, 2013</time>
+<time datetime="2013-09-26T15:10:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time>
       
 
 
@@ -195,7 +143,7 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/05/27/catransform3d/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/05/27/catransform3d/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jerryga.github.com/blog/2013/09/26/ios7-statusbarhidden/" data-via="" data-counturl="http://jerryga.github.com/blog/2013/09/26/ios7-statusbarhidden/" >Tweet</a>
   
   
   
@@ -204,10 +152,8 @@ CGFloat m41（x平移）, m42（y平移）, m43（z平移）, m44（）;
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/24/http-test-app-for-mac/" title="Previous Post: Http Test App For Mac">&laquo; Http Test App For Mac</a>
+        <a class="basic-alignment left" href="/blog/2013/09/23/ios7/" title="Previous Post: ios7">&laquo; ios7</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/27/iosde-san-wei-tou-shi-tou-ying-%28zhuan-%7Clu-ke-%29/" title="Next Post: ios的三维透视投影（转|卢克）">ios的三维透视投影（转|卢克） &raquo;</a>
       
     </p>
   </footer>
