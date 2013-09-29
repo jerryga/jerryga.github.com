@@ -4,7 +4,7 @@
   <title><![CDATA[JerryGa's Blog]]></title>
   <link href="http://jerryga.github.com/atom.xml" rel="self"/>
   <link href="http://jerryga.github.com/"/>
-  <updated>2013-09-26T15:14:14+08:00</updated>
+  <updated>2013-09-29T17:00:29+08:00</updated>
   <id>http://jerryga.github.com/</id>
   <author>
     <name><![CDATA[JerryGa]]></name>
@@ -12,6 +12,115 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ios7 Multitasking]]></title>
+    <link href="http://jerryga.github.com/blog/2013/09/27/ios7-multitasking/"/>
+    <updated>2013-09-27T10:14:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/09/27/ios7-multitasking</id>
+    <content type="html"><![CDATA[<p>Multitasking in ios7</p>
+
+<p>ios7中的多任务</p>
+
+<h2>简介</h2>
+
+<p>在远古的ios4.0石器时代，可以使用
+-beginBackgroundTaskWithExpirationHandler:来使app切换后台后，运行最多600s的时间。珍贵的10分钟，可以用来做些紧急操作，比如保存数据库、保存重要文件。eg：</p>
+
+<pre><code>- (void) saveData
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+
+    [self beginBackgroundUpdateTask];
+
+    //self.dbData to save
+
+    // Do something with the data
+
+    [self endBackgroundUpdateTask];
+});
+</code></pre>
+
+<p>}</p>
+
+<pre><code>- (void) beginBackgroundUpdateTask
+{
+    self.backgroundUpdateTask = [[UIApplication     sharedApplication]  beginBackgroundTaskWithExpirationHandler:^{
+    [self endBackgroundUpdateTask];
+    }];
+}
+
+- (void) endBackgroundUpdateTask
+{
+    [[UIApplication sharedApplication] endBackgroundTask: self.backgroundUpdateTask];
+    self.backgroundUpdateTask = UIBackgroundTaskInvalid;
+}   
+</code></pre>
+
+<p>在超过系统分配的600s时间后，会调用beginBackgroundTaskWithExpirationHandler这个block。在任务结束的时候调用endBackgroundUpdateTask，并设置self.backgroundUpdateTask为UIBackgroundTaskInvalid状态。</p>
+
+<p>ios6和之前的系统说明图：</p>
+
+<p><img src="" alt="" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using CocoaPods to manager your third party.]]></title>
+    <link href="http://jerryga.github.com/blog/2013/09/26/using-cocoapods-to-manager-your-third-party/"/>
+    <updated>2013-09-26T15:41:00+08:00</updated>
+    <id>http://jerryga.github.com/blog/2013/09/26/using-cocoapods-to-manager-your-third-party</id>
+    <content type="html"><![CDATA[<h2>简介：</h2>
+
+<p>CocoaPods主要用于负责管理iOS项目中第三方库。如果Project用了很多第三方库，那么通过CocoaPods，就不再需要手动配置、更新第三方开源库。节省很多时间。</p>
+
+<h2>配置CocoaPods</h2>
+
+<p>通过Mac下的ruby来安装：</p>
+
+<pre><code>$ gem install cocoapods
+$ pod setup
+</code></pre>
+
+<h2>使用CocoaPods</h2>
+
+<p>新建名为Podfile的文件：</p>
+
+<pre><code>platform :ios
+
+pod 'FormatterKit'
+pod 'AFNetworking', '~&gt; 0.7.0'
+</code></pre>
+
+<p>然后将此文件放到项目根目录下：</p>
+
+<p><img src="http://jerryga.github.com/static/CocoaPods-01" alt="" /></p>
+
+<p>然后cd到工程根目录：</p>
+
+<pre><code>pod install
+</code></pre>
+
+<p>之后，在Podfile文件中的第三方库都下载完成并配置OK。
+<strong><em>note</em></strong></p>
+
+<ol>
+<li>在打开工程的时候，需要使用CocoaPods生成的.xcworkspace文件来打开工程。</li>
+<li>每次更改了Podfile文件，需要重新执行一次pod install命令。</li>
+</ol>
+
+
+<h2>查找库：</h2>
+
+<p>使用pod search来查找，比如查找json库：</p>
+
+<p><img src="http://jerryga.github.com/static/CocoaPods-02" alt="" /></p>
+
+<h2>Example</h2>
+
+<p> <a href="https://github.com/jerryga/TestCocoaPods.git">Example In Github</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ios7 StatusBarHidden]]></title>
@@ -39,15 +148,6 @@
 Key: View controller-based status bar appearance
 Value: NO
 </code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ios7]]></title>
-    <link href="http://jerryga.github.com/blog/2013/09/23/ios7/"/>
-    <updated>2013-09-23T11:35:00+08:00</updated>
-    <id>http://jerryga.github.com/blog/2013/09/23/ios7</id>
-    <content type="html"><![CDATA[<h3><a href="http://onevcat.com/2013/06/developer-should-know-about-ios7/">ios7</a></h3>
 ]]></content>
   </entry>
   

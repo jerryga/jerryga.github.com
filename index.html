@@ -9,8 +9,8 @@
   <meta name="author" content="JerryGa">
 
   
-  <meta name="description" content="ios7: //viewDidLoad [self prefersStatusBarHidden]; [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)]; // Add this Method
-- (BOOL) &hellip;">
+  <meta name="description" content="Multitasking in ios7 ios7中的多任务 简介 在远古的ios4.0石器时代，可以使用
+-beginBackgroundTaskWithExpirationHandler:来使app切换后台后，运行最多600s的时间。珍贵的10分钟，可以用来做些紧急操作，比如保存数据库、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +72,169 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/09/27/ios7-multitasking/">Ios7 Multitasking</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-27T10:14:00+08:00" pubdate data-updated="true">Sep 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Multitasking in ios7</p>
+
+<p>ios7中的多任务</p>
+
+<h2>简介</h2>
+
+<p>在远古的ios4.0石器时代，可以使用
+-beginBackgroundTaskWithExpirationHandler:来使app切换后台后，运行最多600s的时间。珍贵的10分钟，可以用来做些紧急操作，比如保存数据库、保存重要文件。eg：</p>
+
+<pre><code>- (void) saveData
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+
+    [self beginBackgroundUpdateTask];
+
+    //self.dbData to save
+
+    // Do something with the data
+
+    [self endBackgroundUpdateTask];
+});
+</code></pre>
+
+<p>}</p>
+
+<pre><code>- (void) beginBackgroundUpdateTask
+{
+    self.backgroundUpdateTask = [[UIApplication     sharedApplication]  beginBackgroundTaskWithExpirationHandler:^{
+    [self endBackgroundUpdateTask];
+    }];
+}
+
+- (void) endBackgroundUpdateTask
+{
+    [[UIApplication sharedApplication] endBackgroundTask: self.backgroundUpdateTask];
+    self.backgroundUpdateTask = UIBackgroundTaskInvalid;
+}   
+</code></pre>
+
+<p>在超过系统分配的600s时间后，会调用beginBackgroundTaskWithExpirationHandler这个block。在任务结束的时候调用endBackgroundUpdateTask，并设置self.backgroundUpdateTask为UIBackgroundTaskInvalid状态。</p>
+
+<p>ios6和之前的系统说明图：</p>
+
+<p><img src="" alt="" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/26/using-cocoapods-to-manager-your-third-party/">Using CocoaPods to Manager Your Third Party.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-26T15:41:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>简介：</h2>
+
+<p>CocoaPods主要用于负责管理iOS项目中第三方库。如果Project用了很多第三方库，那么通过CocoaPods，就不再需要手动配置、更新第三方开源库。节省很多时间。</p>
+
+<h2>配置CocoaPods</h2>
+
+<p>通过Mac下的ruby来安装：</p>
+
+<pre><code>$ gem install cocoapods
+$ pod setup
+</code></pre>
+
+<h2>使用CocoaPods</h2>
+
+<p>新建名为Podfile的文件：</p>
+
+<pre><code>platform :ios
+
+pod 'FormatterKit'
+pod 'AFNetworking', '~&gt; 0.7.0'
+</code></pre>
+
+<p>然后将此文件放到项目根目录下：</p>
+
+<p><img src="/static/CocoaPods-01" alt="" /></p>
+
+<p>然后cd到工程根目录：</p>
+
+<pre><code>pod install
+</code></pre>
+
+<p>之后，在Podfile文件中的第三方库都下载完成并配置OK。
+<strong><em>note</em></strong></p>
+
+<ol>
+<li>在打开工程的时候，需要使用CocoaPods生成的.xcworkspace文件来打开工程。</li>
+<li>每次更改了Podfile文件，需要重新执行一次pod install命令。</li>
+</ol>
+
+
+<h2>查找库：</h2>
+
+<p>使用pod search来查找，比如查找json库：</p>
+
+<p><img src="/static/CocoaPods-02" alt="" /></p>
+
+<h2>Example</h2>
+
+<p> <a href="https://github.com/jerryga/TestCocoaPods.git">Example In Github</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/09/26/ios7-statusbarhidden/">Ios7 StatusBarHidden</a></h1>
     
     
@@ -116,42 +279,6 @@
 Key: View controller-based status bar appearance
 Value: NO
 </code></pre>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/23/ios7/">Ios7</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-23T11:35:00+08:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3><a href="http://onevcat.com/2013/06/developer-should-know-about-ios7/">ios7</a></h3>
 </div>
   
   
@@ -1124,122 +1251,6 @@ dispatch_apply([array count], globalQueue, ^(size_t index) {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/29/ruby-log/">Ruby Log</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-29T23:11:00+08:00" pubdate data-updated="true">Aug 29<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>markdown语法快速成文，git与github实时保存，jekyll或octopress实时成书或者showoff实时成ppt。入门略有门槛，但是习惯了，写作效率会好很多。以下以octopress为例，进行说明。</h3>
-
-<h2>配置个人github账号:</h2>
-
-<h3>登陆github，创建一个个人账号。假设叫做：rubyonchina。</h3>
-
-<h3>然后回到ubuntu或者Mac里面，仍然是在终端里面，输入：</h3>
-
-<h3>[[ -f ~/.ssh/id_rsa.pub ]] || ssh-keygen -t rsa</h3>
-
-<h3>按照默认提示一路确认，生成密钥之后，将生成的信息复制到github页面中，如下所示：[[ -f ~/.ssh/id_rsa.pub ]] &amp;&amp; cat ~/.ssh/id_rsa.pub | xclip</h3>
-
-<h3>然后在浏览器中打开页面：</h3>
-
-<h3>https://github.com/account/ssh</h3>
-
-<h3>点击，Add another public key，粘贴前面步骤复制的信息，请格外注意，不要在Title中填写内容，直接将复制的内容粘贴到Key中，然后点击：Add Key即可。</h3>
-
-<h2>配置octopress个人博客</h2>
-
-<h3>cd ~/dev/</h3>
-
-<h3>git clone git://github.com/imathis/octopress.git rubyonchina.github.com</h3>
-
-<h3>cd ~/dev/rubyonchina.github.com</h3>
-
-<h3>修改默认的.rvmrc文件的内容为：</h3>
-
-<h3>rvm use 1.9.2@rails31</h3>
-
-<h3>安装相应的gem:</h3>
-
-<h3>bundle update</h3>
-
-<h3>然后生成模版文件：</h3>
-
-<h3>rake install</h3>
-
-<h2>分发到github上。</h2>
-
-<h3>分发之前，假设你已经注册用户名为rubyonchina的github.com账号，已经创建名为rubyonchina.github.com项目。</h3>
-
-<h3>cd ~/dev/rubyonchina.github.com</h3>
-
-<h3>git remote add rubyonchina git@github.com:rubyonchina/rubyonchina.github.com.git</h3>
-
-<h2>新增一篇测试博客：</h2>
-
-<h3>rake new_post[&#8220;post title&#8221;]</h3>
-
-<h3>生成静态站点：</h3>
-
-<h3>rake generate</h3>
-
-<h3>配置octopress与github的连接：</h3>
-
-<h3>rake setup_github_pages</h3>
-
-<h3>按照提示填入你的github项目网址，比如，本示例是：</h3>
-
-<h3>git@github.com:rubyonchina/rubyonchina.github.com.git</h3>
-
-<h3>分发到github上：</h3>
-
-<h3>rake deploy</h3>
-
-<h3>第一次运行时，会询问是否建立对github的授权，输入：yes。然后将站点更新的内容推送到github上。</h3>
-
-<h3>git push -u rubyonchina master</h3>
-
-<h3>尝试浏览，</h3>
-
-<h3>http://rubyonchina.github.com</h3>
-
-<h3>OK！成功！然后，此时，再创建一个新的github的source分支，用于保存写作的md源文件等。</h3>
-
-<h3>git add .</h3>
-
-<h3>git commit -m &#8220;some changes&#8221;</h3>
-
-<h3>git push rubyonchina source</h3>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1255,11 +1266,15 @@ dispatch_apply([array count], globalQueue, ^(size_t index) {
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/09/26/ios7-statusbarhidden/">ios7 StatusBarHidden</a>
+        <a href="/blog/2013/09/27/ios7-multitasking/">ios7 Multitasking</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/09/23/ios7/">ios7</a>
+        <a href="/blog/2013/09/26/using-cocoapods-to-manager-your-third-party/">Using CocoaPods to manager your third party.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/26/ios7-statusbarhidden/">ios7 StatusBarHidden</a>
       </li>
     
       <li class="post">
@@ -1268,10 +1283,6 @@ dispatch_apply([array count], globalQueue, ^(size_t index) {
     
       <li class="post">
         <a href="/blog/2013/09/17/apns/">APNS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/13/objc-msgsend-vs-performselector/">objc_msgSend() VS performSelector</a>
       </li>
     
   </ul>
